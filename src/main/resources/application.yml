@@ -1,0 +1,54 @@
+## API 호출 시 SQL 문 출력
+spring:
+  jpa:
+    show-sql: true
+
+## Mysql 상세 지정
+    database: mysql
+
+  ## Mysql 기본 설정
+  datasource:
+    url: ENC(ve8nX3UyUztK39L1bwLNSNpSIUFU6hijhPp/nLchG1bz/R0xWo65JMW1Q61dPzMlZHHItkFOq2jqunsAb1IQKDr8WOqKXArwbQjwhZmW1r/5rSMNLfgVG5Vqp0EG75Obujt+eMcMng4=)
+    username: ENC(CRtDDOYA5iA58jbdUQN+Zw==)
+    password: ENC(fc3Nv75og6+jpPgiFDF7TvRpABTMLK+v)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+## 파일 크기 지정
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+## redis 설정
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+jwt:
+  secret: ENC(bFw/rS0aB/ppcvo42Xp8Ge0k6LGmBjLcv6dCbNDoEUFH0KWoekU7ph2R0ZN40IrUHnRikMXVHbtFs68mCaOzEs5SaTUYookBlVX6rBo38mYrccD/xRvUgZfT/PHa8XKRPJdylznzelPL7tJSdwaT+lQpEmV8HGDTHtkUVBLSVdYBqa62gpnVtg==)
+  token-validity-in-seconds: 2592000  # 60 * 15 15분 -> 초
+  refresh-token-validity-in-seconds: 2592000 #1209600 # 60 * 60 * 24 * 30 30일 -> 초
+
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ENC(8zKevsNQ4lZrpcYggLp//J/hVL+X2YtVwLX5ti4jgD0=)
+      secretKey: ENC(MVhEWhPVm9Vm6Fi/O5ZLQ8hLJMiLQobQ5i8sQuRHSJg5JxHveuhgRPP4BFNPZuDQqWmV+5fixSM=)
+    s3:
+      bucket: doggywalky-image
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
