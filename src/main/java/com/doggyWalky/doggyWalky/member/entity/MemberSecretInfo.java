@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class MemberSecretInfo {
 
     @Id @GeneratedValue
+    @Column(name="member_secret_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)

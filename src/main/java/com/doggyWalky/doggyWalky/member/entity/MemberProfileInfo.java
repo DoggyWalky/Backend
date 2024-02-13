@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class MemberProfileInfo extends BaseEntity {
 
     @Id @GeneratedValue
+    @Column(name="member_profile_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
