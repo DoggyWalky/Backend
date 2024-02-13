@@ -23,6 +23,13 @@ public class MemberProfileInfo extends BaseEntity {
 
     private String description;
 
+    public MemberProfileInfo(Member member) {
+        this.member = member;
+        this.nickName = member.getName();
+        this.description = "기본 자기 소개글을 작성해주시기 바랍니다.";
+    }
+
+
     public MemberProfileInfo(Member member,String nickName, String description) {
         this.member = member;
         this.nickName = nickName;

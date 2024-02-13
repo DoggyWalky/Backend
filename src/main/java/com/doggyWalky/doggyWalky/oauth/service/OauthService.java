@@ -5,7 +5,11 @@ import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
 import com.doggyWalky.doggyWalky.member.entity.Member;
+import com.doggyWalky.doggyWalky.member.entity.MemberProfileInfo;
+import com.doggyWalky.doggyWalky.member.entity.MemberSecretInfo;
+import com.doggyWalky.doggyWalky.member.repository.MemberProfileInfoRepository;
 import com.doggyWalky.doggyWalky.member.repository.MemberRepository;
+import com.doggyWalky.doggyWalky.member.repository.MemberSecretInfoRepository;
 import com.doggyWalky.doggyWalky.oauth.domain.NaverOauth;
 import com.doggyWalky.doggyWalky.oauth.dto.NaverOauthToken;
 import com.doggyWalky.doggyWalky.oauth.dto.NaverUser;
@@ -41,6 +45,10 @@ public class OauthService {
     private final HttpServletResponse response;
 
     private final MemberRepository memberRepository;
+
+    private final MemberProfileInfoRepository memberProfileRepository;
+
+    private final MemberSecretInfoRepository memberSecretRepository;
 
     private final RedisService redisService;
 
@@ -88,6 +96,15 @@ public class OauthService {
                     System.out.println("신규 회원");
                     Member member = new Member(symmetricCrypto.encrypt(naverUser.getEmail()),naverUser.getName());
                     Member findMember = memberRepository.save(member);
+
+                    MemberProfileInfo memberProfile = new MemberProfileInfo(member);
+                    memberProfileRepository.save(memberProfile);
+
+                    MemberSecretInfo memberSecret = new MemberSecretInfo(member,naverUser.getMobile());
+                    memberSecretRepository.save(memberSecret);
+
+
+
                     System.out.println("회원 비교 :" + (member==findMember));
                     System.out.println("회원 이메일(실제) :" +naverUser.getEmail());
                     System.out.println("회원 이메일(DB 암호화) :" +findMember.getEmail());
