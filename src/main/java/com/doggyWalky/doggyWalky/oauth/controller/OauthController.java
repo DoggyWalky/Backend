@@ -22,12 +22,18 @@ public class OauthController {
 
     private final OauthService oauthService;
 
+    /**
+     * 소셜 로그인 요청
+     */
     @GetMapping("/auth/{socialLoginType}")
     public void socialLoginRedirect(@PathVariable(name="socialLoginType") String type)  throws IOException {
         SocialLoginType socialLoginType= SocialLoginType.valueOf(type.toUpperCase());
         oauthService.request(socialLoginType);
     }
 
+    /**
+     * 소셜 로그인 요청에 대한 응답 처리(로그인, 회원가입 처리)
+     */
     @GetMapping("/auth/{socialLoginType}/callback")
     public ResponseEntity callback(
             @PathVariable(name="socialLoginType") String type,
