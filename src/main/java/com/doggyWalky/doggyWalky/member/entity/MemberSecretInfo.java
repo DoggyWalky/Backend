@@ -22,15 +22,22 @@ public class MemberSecretInfo extends BaseEntity {
     //Todo : 주소 추가할 지 여부 확인 후 진행
 //    private String address;
 
+    private boolean deletedYn;
+
     private String phoneNumber;
 
     public MemberSecretInfo(Member member, String phoneNumber) {
         this.member = member;
         this.phoneNumber = phoneNumber;
+        this.deletedYn = false;
     }
 
     private void changeSecretInfo(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void softDelete() {
+        this.deletedYn = true;
     }
 
 //    public MemberSecretInfo(Member member, String address, String phoneNumber) {

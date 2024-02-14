@@ -23,10 +23,13 @@ public class MemberProfileInfo extends BaseEntity {
 
     private String description;
 
+    private boolean deletedYn;
+
     public MemberProfileInfo(Member member) {
         this.member = member;
         this.nickName = member.getName();
         this.description = "기본 자기 소개글을 작성해주시기 바랍니다.";
+        this.deletedYn = false;
     }
 
 
@@ -39,5 +42,9 @@ public class MemberProfileInfo extends BaseEntity {
     private void changProfile(String nickName, String description) {
         this.nickName = nickName;
         this.description = description;
+    }
+
+    public void softDelete() {
+        this.deletedYn = true;
     }
 }

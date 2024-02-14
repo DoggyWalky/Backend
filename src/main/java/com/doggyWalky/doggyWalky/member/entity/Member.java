@@ -1,6 +1,5 @@
 package com.doggyWalky.doggyWalky.member.entity;
 
-import com.doggyWalky.doggyWalky.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,9 +20,16 @@ public class Member {
 
     private LocalDateTime createdAt;
 
+    private boolean deletedYn;
+
     public Member(String email,String name) {
         this.email = email;
         this.name = name;
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
+        this.deletedYn = false;
+    }
+
+    public void softDelete() {
+        this.deletedYn = true;
     }
 }
