@@ -2,15 +2,17 @@ package com.doggyWalky.doggyWalky.config;
 
 import com.doggyWalky.doggyWalky.security.jwt.*;
 import com.doggyWalky.doggyWalky.security.redis.RedisService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
@@ -37,9 +39,11 @@ public class SecurityConfig {
 
     private final CorsFilter corsFilter;
 
+    private final UserDetailsService userDetailsService;
+
     public SecurityConfig(TokenProvider tokenProvider, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
                           JwtAccessDeniedHandler jwtAccessDeniedHandler, RedisService redisService, CorsFilter corsFilter,
-                          HmacAndBase64 hmacAndBase64, RefreshTokenProvider refreshTokenProvider) {
+                          HmacAndBase64 hmacAndBase64, RefreshTokenProvider refreshTokenProvider, UserDetailsService userDetailsService) {
         this.tokenProvider = tokenProvider;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
@@ -47,12 +51,19 @@ public class SecurityConfig {
         this.corsFilter = corsFilter;
         this.hmacAndBase64 = hmacAndBase64;
         this.refreshTokenProvider = refreshTokenProvider;
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(customAuthenticationProvider());
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public AuthenticationProvider customAuthenticationProvider() {
+        return new CustomAuthenticationProvider(userDetailsService);
     }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,7 +71,7 @@ public class SecurityConfig {
         // 로그인 API, 회원가입 API는 토큰이 없는 상태에서 요청이 들어오기 때문에 모두 permitAll 설정을 한다.
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/send_verification", "/verify_code", "/idcheck", "/signup").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
                         .requestMatchers("/**/*.css", "/**/*.js", "/**/*.png").permitAll()
                         .anyRequest().authenticated());

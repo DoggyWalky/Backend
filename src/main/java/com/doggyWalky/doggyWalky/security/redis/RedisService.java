@@ -12,7 +12,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class RedisService implements TokenStorageService {
 
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String,String> redisTemplate;
 
     @Value("${jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenValidityInSeconds;

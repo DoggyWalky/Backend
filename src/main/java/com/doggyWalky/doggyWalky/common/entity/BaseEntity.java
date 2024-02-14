@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 @Getter
 public class BaseEntity {
 
-    @Column(updatable = false)
+    @Column(updatable = false, name="created_at")
     private LocalDateTime createdDate;
+    @Column(name="updated_at")
     private LocalDateTime updatedDate;
 
     @PrePersist
