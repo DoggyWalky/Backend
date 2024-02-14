@@ -3,6 +3,7 @@ package com.doggyWalky.doggyWalky.member.dto.response;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 public class MemberProfileResponseDto {
@@ -13,9 +14,9 @@ public class MemberProfileResponseDto {
 
     private String description;
 
-    private LocalDateTime createdAt;
+    private String createdAt;
 
-    private LocalDateTime updatedAt;
+    private String updatedAt;
 
     //Todo: 파일 이미지 추가
 //    private String profileImage
@@ -24,7 +25,7 @@ public class MemberProfileResponseDto {
         this.memberId = memberId;
         this.nickName = nickName;
         this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.updatedAt = updatedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
