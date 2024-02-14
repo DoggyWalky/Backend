@@ -2,6 +2,8 @@ package com.doggyWalky.doggyWalky.member.controller;
 
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
+import com.doggyWalky.doggyWalky.member.dto.response.MemberProfileResponseDto;
+import com.doggyWalky.doggyWalky.member.service.MemberService;
 import com.doggyWalky.doggyWalky.security.jwt.HmacAndBase64;
 import com.doggyWalky.doggyWalky.security.redis.TokenStorageService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,8 @@ public class MemberController {
     private final TokenStorageService redisService;
 
     private final HmacAndBase64 hmacAndBase64;
+
+    private final MemberService memberService;
 
     /**
      * 로그아웃 시 토큰 제거
@@ -37,5 +42,15 @@ public class MemberController {
         }
 
         return new ResponseEntity(principal.getName() + " 삭제완료", HttpStatus.OK);
+    }
+
+    /**
+     * 개인 회원정보 조회
+     */
+    @GetMapping("/members")
+    public ResponseEntity getMember(Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        List<MemberProfileResponseDto> memberProfiles = memberService.getMemberProfiles(memberId);
+        return new ResponseEntity(memberProfiles, HttpStatus.OK);
     }
 }
