@@ -24,7 +24,16 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "RefreshToken is invalid"),
 
     // LOGIN
-    INVALID_SOCIAL_LOGIN_TYPE(HttpStatus.BAD_REQUEST, "Unsupported or invalid social login type");
+    INVALID_SOCIAL_LOGIN_TYPE(HttpStatus.BAD_REQUEST, "Unsupported or invalid social login type"),
+
+
+    // File
+    INVALID_FILE_TYPE(HttpStatus.FORBIDDEN, "Invalid file type"),
+    FILE_NOT_FOUND(HttpStatus.NOT_FOUND, "File not founded"),
+    FILE_INFO_EXISTS(HttpStatus.CONFLICT, "File Info exists"),
+    MAX_FILE_SIZE_10MB(HttpStatus.BAD_REQUEST, "Max file size 10MB"),
+    FILE_STORAGE_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "File storage failed");
+
 
     private HttpStatus status;
     private String message;

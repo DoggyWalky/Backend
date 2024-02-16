@@ -1,0 +1,49 @@
+package com.doggyWalky.doggyWalky.file.dto.response;
+
+import com.doggyWalky.doggyWalky.file.entity.File;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class FileResponseDto {
+
+    private Long fileId;
+
+    private Long size;
+
+    private String path;
+
+    private String fileName;
+
+    private String createdAt;
+
+    private Long fileInfoId;
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public static FileResponseDto response(File file, Boolean isResponse) {
+        FileResponseDto response = FileResponseDto.builder()
+                .fileId(file.getId())
+                .path(file.getPath())
+                .size(file.getSize())
+                .fileName(file.getFileName())
+                .createdAt(file.getCreatedAt().toString().replace("T", " "))
+                .build();
+
+        if (isResponse) {
+            response.setFileName(getOriginalFileName(response.getFileName()));
+        }
+        return response;
+    }
+
+    public static String getOriginalFileName(String fileName) {
+        return fileName.substring(0, fileName.lastIndexOf("_"));
+    }
+}
