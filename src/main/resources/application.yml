@@ -56,10 +56,10 @@ jwt:
 cloud:
   aws:
     credentials:
-      accessKey: ENC(8zKevsNQ4lZrpcYggLp//J/hVL+X2YtVwLX5ti4jgD0=)
-      secretKey: ENC(MVhEWhPVm9Vm6Fi/O5ZLQ8hLJMiLQobQ5i8sQuRHSJg5JxHveuhgRPP4BFNPZuDQqWmV+5fixSM=)
+      accessKey: ENC(onER3Px/ZP7tB6SWIXlANzukRG6ajeHnIoIBm7ysp7Q=)
+      secretKey: ENC(jeQbOEk9b6p929KLCBALuTN4NXDnAKONqOza/mEvWrNKOWcd0jzNO1Cdkj381uC5HJvw4scC8+g=)
     s3:
-      bucket: doggywalky-image
+      bucket: doggywalky-bucket
     region:
       static: ap-northeast-2
     stack:
@@ -67,9 +67,17 @@ cloud:
 
 #logging:
 #  level:
+#    root: INFO
+#    com:
+#      amazonaws: DEBUG
+#      amazonaws.util.EC2MetadataUtils: ERROR
+#    org:
+#      springframework:
+#        web: DEBUG
 #    org.hibernate.SQL: debug
 #    org.hibernate.type: trace
 #    p6spy: DEBUG
+
 
 ## p6spy query logging
 decorator:
