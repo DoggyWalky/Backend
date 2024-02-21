@@ -37,7 +37,7 @@ spring:
       naver:
         client-id: ENC(wLlEYfWt/vCsszkNDWs12dwvMW8smB/4CVCrMmz+GW0=)
         client-secret: ENC(WeL9MbSlLQuGFis/eRcFjyaiqmECqKVy)
-        scope: name,email,age,gender,bithday,birthyear,mobile
+        scope: name,email,age,gender,birthday,birthyear,mobile
         client-name: Naver
         authorization-grant-type: authorization_code
         redirect-url: http://localhost:8080/auth/naver/callback

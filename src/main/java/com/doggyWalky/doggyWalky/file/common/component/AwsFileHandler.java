@@ -49,8 +49,6 @@ public class AwsFileHandler implements FileHandler  {
                                     .withCannedAcl(CannedAccessControlList.PublicRead)
                     );
         } catch (SdkClientException | IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e);
             throw new ApplicationException(ErrorCode.FILE_STORAGE_ERROR);
         }
         String path = amazonS3Client.getUrl(bucket, newFileName).toString();

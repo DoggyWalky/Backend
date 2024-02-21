@@ -1,5 +1,7 @@
 package com.doggyWalky.doggyWalky.constant;
 
+import java.util.List;
+
 public class ConstantPool {
 
     // HEADER
@@ -27,5 +29,8 @@ public class ConstantPool {
         NAVER,
         KAKAO
     }
+
+    // 이미지 타입
+    public static List<String> imageExtList = List.of("jpg", "jpeg", "gif", "png");
 
 }
