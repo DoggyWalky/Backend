@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -26,6 +29,15 @@ public class FileResponseDto {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public FileResponseDto(Long fileId, Long size, String path, String fileName, LocalDateTime createdAt, Long fileInfoId) {
+        this.fileId = fileId;
+        this.size = size;
+        this.path = path;
+        this.fileName = fileName;
+        this.createdAt = createdAt.toString().replace("T", " ");
+        this.fileInfoId = fileInfoId;
     }
 
     public static FileResponseDto response(File file, Boolean isResponse) {
