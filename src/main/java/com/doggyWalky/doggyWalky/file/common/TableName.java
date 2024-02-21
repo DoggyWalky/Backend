@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum TableName {
 
-    MEMBER_PROFILE_INFO,
+    MEMBER,
     DOG,
     BOARD
 }
