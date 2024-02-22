@@ -13,9 +13,8 @@ import java.util.Optional;
 public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
 
 
-    @Query("select fi from FileInfo fi where fi.file.id = :fileId and fi.deletedAt is null")
-    Optional<FileInfo> findFileInfo(@Param("fileId") Long fileId);
 
+    @Query("select f from FileInfo f where f.file.id = :fileId and f.deletedAt is null")
     Optional<FileInfo> findFileInfoByFileId(@Param("fileId") Long fileId);
 
 
