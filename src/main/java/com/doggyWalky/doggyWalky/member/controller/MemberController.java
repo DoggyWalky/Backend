@@ -2,15 +2,21 @@ package com.doggyWalky.doggyWalky.member.controller;
 
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
+import com.doggyWalky.doggyWalky.member.dto.request.MemberPatchProfileDto;
 import com.doggyWalky.doggyWalky.member.dto.response.MemberProfileResponseDto;
+import com.doggyWalky.doggyWalky.member.dto.response.MemberSimpleResponseDto;
 import com.doggyWalky.doggyWalky.member.service.MemberService;
 import com.doggyWalky.doggyWalky.security.jwt.HmacAndBase64;
 import com.doggyWalky.doggyWalky.security.redis.TokenStorageService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
@@ -51,6 +57,30 @@ public class MemberController {
     public ResponseEntity getMember(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         List<MemberProfileResponseDto> memberProfiles = memberService.getMemberProfiles(memberId);
+        System.out.println(memberProfiles);
         return new ResponseEntity(memberProfiles, HttpStatus.OK);
+    }
+
+    /**
+     * 회원 프로필 수정
+     */
+    @PatchMapping("/members/profile")
+    public ResponseEntity<MemberSimpleResponseDto> updateMemberProfile(@Valid @RequestBody MemberPatchProfileDto dto, BindingResult bindingResult,Principal principal) {
+        // Validation 체크
+        if (bindingResult.hasErrors()) {
+
+            if (bindingResult.hasFieldErrors("nickName")) {
+                throw new ApplicationException(ErrorCode.INCORRECT_FORMAT_NICKNAME);
+            }
+
+            if (bindingResult.hasFieldErrors("description")) {
+                throw new ApplicationException(ErrorCode.INCORRECT_FORMAT_DESCRIPTION);
+            }
+
+        }
+
+        Long memberId = Long.parseLong(principal.getName());
+        memberService.updateMemberProfile(memberId, dto);
+        return new ResponseEntity<>(new MemberSimpleResponseDto(memberId), HttpStatus.OK);
     }
 }

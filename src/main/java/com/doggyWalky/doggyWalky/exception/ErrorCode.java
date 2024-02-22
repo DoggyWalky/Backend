@@ -26,6 +26,12 @@ public enum ErrorCode {
     // LOGIN
     INVALID_SOCIAL_LOGIN_TYPE(HttpStatus.BAD_REQUEST, "Unsupported or invalid social login type"),
 
+    // MEMBER
+    INCORRECT_FORMAT_NICKNAME(HttpStatus.UNPROCESSABLE_ENTITY, "Nickname format is Incorrect"),
+    INCORRECT_FORMAT_DESCRIPTION(HttpStatus.UNPROCESSABLE_ENTITY, "Description format is Incorrect"),
+
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"),
+
 
     // File
     INVALID_FILE_TYPE(HttpStatus.FORBIDDEN, "Invalid file type"),

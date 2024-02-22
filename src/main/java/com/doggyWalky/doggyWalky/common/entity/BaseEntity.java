@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     @Column(updatable = false, name="created_at")
-    private LocalDateTime createdDate;
+    protected LocalDateTime createdDate;
     @Column(name="updated_at")
-    private LocalDateTime updatedDate;
+    protected LocalDateTime updatedDate;
 
     @PrePersist
     public void prePersist() {
