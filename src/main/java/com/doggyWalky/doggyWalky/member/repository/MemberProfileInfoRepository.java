@@ -15,6 +15,7 @@ public interface MemberProfileInfoRepository extends JpaRepository<MemberProfile
             "from MemberProfileInfo m where m.member.id= :memberId and m.deletedYn = :deletedYn")
     List<MemberProfileResponseDto> findMemberProfiles(@Param("memberId") Long memberId,@Param("deletedYn") boolean deletedYn);
 
-    Optional<MemberProfileInfo> findByMemberId(Long memberId);
+    @Query("select m from MemberProfileInfo m where m.member.id= :memberId and m.deletedYn = :deletedYn")
+    Optional<MemberProfileInfo> findByMemberId(@Param("memberId")Long memberId,@Param("deleteYn") boolean deletedYn);
 }
 

@@ -16,7 +16,7 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     @Query("select fi from FileInfo fi where fi.file.id = :fileId and fi.deletedAt is null")
     Optional<FileInfo> findFileInfo(@Param("fileId") Long fileId);
 
-    FileInfo findFileInfoByFileId(@Param("fileId") Long fileId);
+    Optional<FileInfo> findFileInfoByFileId(@Param("fileId") Long fileId);
 
 
     @Query("select fi from FileInfo fi where fi.tableName = :tableName and fi.tableKey = :tableKey and fi.deletedAt is null")

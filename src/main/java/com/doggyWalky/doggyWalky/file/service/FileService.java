@@ -72,7 +72,7 @@ public class FileService {
     // 파일 정보 저장 (각 도메인의 저장, 수정 시 사용)
     public void saveFileInfo(FileInfo fileInfo) {
         // 파일 정보 존재 시 예외 처리
-        if (fileInfoRepository.findFileInfoByFileId(fileInfo.getFile().getId())==null) {
+        if (fileInfoRepository.findFileInfoByFileId(fileInfo.getFile().getId()).isPresent()) {
             throw new ApplicationException(ErrorCode.FILE_INFO_EXISTS);
         }
         fileInfoRepository.save(fileInfo);
@@ -83,7 +83,7 @@ public class FileService {
     public void saveFileInfoList(List<FileInfo> fileInfoList) {
         fileInfoList.forEach(fileInfo -> {
             // 파일 정보 존재 시 예외 처리
-            if (fileInfoRepository.findFileInfoByFileId(fileInfo.getFile().getId())==null) {
+            if (fileInfoRepository.findFileInfoByFileId(fileInfo.getFile().getId()).isPresent()) {
                 throw new ApplicationException(ErrorCode.FILE_INFO_EXISTS);
             }
         });

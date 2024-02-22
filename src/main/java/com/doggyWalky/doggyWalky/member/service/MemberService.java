@@ -16,6 +16,7 @@ import com.doggyWalky.doggyWalky.member.repository.MemberProfileInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class MemberService {
         return memberProfiles;
     }
 
-    // Todo: 테스트 필요
-    public void updateMemberProfile(Long memberId, MemberPatchProfileDto dto) {
-        MemberProfileInfo profile = memberProfileInfoRepository.findByMemberId(memberId).orElseThrow(() -> new ApplicationException(ErrorCode.USER_NOT_FOUND));
 
+    public void updateMemberProfile(Long memberId, MemberPatchProfileDto dto) {
+        MemberProfileInfo profile = memberProfileInfoRepository.findByMemberId(memberId,false).orElseThrow(() -> new ApplicationException(ErrorCode.USER_NOT_FOUND));
+        System.out.println("MemberPatchProfileDto :" + dto);
         // 프로필 이미지 - fileId 값이 있는 경우
         if (dto.getFileId() != null) {
 
@@ -47,19 +48,23 @@ public class MemberService {
             File file = fileService.findFile(dto.getFileId());
             fileService.checkFileExtForProfile(file.getFileName());
 
-            // 기본이미지 아닐 경우 기존 file 삭제
+            // 기본이미지 아닐 경우 기존 파일 정보 삭제
             if (!profile.getProfileImage().equals(BasicImage.BASIC_USER_IMAGE.getPath())) {
-                FileRequestDto profileImage = FileRequestDto.create(TableName.MEMBER, memberId);
+                FileRequestDto profileImage = FileRequestDto.create(TableName.MEMBER_PROFILE_INFO, profile.getId());
                 FileResponseDto findProfileFile = fileService.findFilesByTableInfo(profileImage, false).get(0);
                 fileService.delete(findProfileFile.getFileId());
             }
 
-            fileService.saveFileInfo(new FileInfo(TableName.MEMBER, memberId, file));
+            // 공통 : 파일 정보 저장
+            fileService.saveFileInfo(new FileInfo(TableName.MEMBER_PROFILE_INFO, profile.getId(), file));
             dto.setProfileImage(file.getPath());
 
-        } else if (dto.getProfileImage() == null) {
+        } else if (!StringUtils.hasText(dto.getProfileImage())) {
+            // 사진을 제거한 상태이기 때문에 기본 이미지로 세팅해주는 작업
+            // 기존 파일 정보 제거
+            System.out.println("BasicImage: " + BasicImage.BASIC_USER_IMAGE.getPath());
             dto.setProfileImage(BasicImage.BASIC_USER_IMAGE.getPath());
-            FileRequestDto profileImage = FileRequestDto.create(TableName.MEMBER, memberId);
+            FileRequestDto profileImage = FileRequestDto.create(TableName.MEMBER_PROFILE_INFO, profile.getId());
             List<FileResponseDto> fileList = fileService.findFilesByTableInfo(profileImage, false);
 
             if (fileList.size() > 0) {
@@ -69,6 +74,7 @@ public class MemberService {
 
         }
 
+        // 공통 : MemberProfile 수정 작업
         profile.changProfile(dto);
 
     }
