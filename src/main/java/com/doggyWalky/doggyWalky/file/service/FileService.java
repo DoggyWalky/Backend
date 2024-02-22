@@ -101,7 +101,7 @@ public class FileService {
     // Todo: 테스트
     // 파일 id로 파일 정보 조회
     private FileInfo findFileInfoByFileId(Long fileId) {
-        return fileInfoRepository.findFileInfo(fileId).orElseThrow(() -> new ApplicationException(ErrorCode.FILE_NOT_FOUND));
+        return fileInfoRepository.findFileInfoByFileId(fileId).orElseThrow(() -> new ApplicationException(ErrorCode.FILE_NOT_FOUND));
     }
 
     // Todo: 테스트
