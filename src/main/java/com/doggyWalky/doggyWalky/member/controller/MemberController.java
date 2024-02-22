@@ -14,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -82,5 +79,17 @@ public class MemberController {
         Long memberId = Long.parseLong(principal.getName());
         memberService.updateMemberProfile(memberId, dto);
         return new ResponseEntity<>(new MemberSimpleResponseDto(memberId), HttpStatus.OK);
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    @DeleteMapping("/members")
+    public ResponseEntity updateMemberDelete(Principal principal, HttpServletRequest request) {
+        Long memberId = Long.parseLong(principal.getName());
+        memberService.updateMemberDelete(memberId, request);
+
+        // Todo: Access Token은 요청을 보낸 Axios API에서 쿠키를 삭제하도록 지시한다.
+        return new ResponseEntity(new MemberSimpleResponseDto(memberId), HttpStatus.OK);
     }
 }
