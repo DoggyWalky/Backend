@@ -1,5 +1,6 @@
 package com.doggyWalky.doggyWalky.file.entity;
 
+import com.doggyWalky.doggyWalky.file.common.BasicImage;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
