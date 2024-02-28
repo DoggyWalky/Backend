@@ -77,7 +77,11 @@ cloud:
 #    org.hibernate.SQL: debug
 #    org.hibernate.type: trace
 #    p6spy: DEBUG
-
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 
 ## p6spy query logging
 decorator:
