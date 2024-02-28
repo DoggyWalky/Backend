@@ -13,16 +13,19 @@ public class ChatRoomMessage {
 
     private Long senderId;
     private Long receiverId;
-    private Long ChatRoomId;
+    private Long chatRoomId;
+    private Long jobPostId;
     private Type type;
 
-    public static ChatRoomMessage createChatRoom(Long senderId, Long receiverId) {
+    public static ChatRoomMessage createChatRoom(Long senderId, Long receiverId,Long jobPostId) {
         return ChatRoomMessage
                 .builder()
-                .ChatRoomId(null)
+                .chatRoomId(null)
                 .senderId(senderId)
                 .receiverId(receiverId)
+                .jobPostId(jobPostId)
                 .type(Type.CREATE)
                 .build();
     }
+
 }
