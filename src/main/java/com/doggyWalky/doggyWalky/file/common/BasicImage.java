@@ -9,7 +9,7 @@ public enum BasicImage {
 
     BASIC_USER_IMAGE("https://doggywalky-bucket.s3.ap-northeast-2.amazonaws.com/basic_user_image.jpg"),
     BASIC_DOG_IMAGE("https://doggywalky-bucket.s3.ap-northeast-2.amazonaws.com/basic_dog_image.jpg"),
-    BASIC_BOARD_IMAGE("https://doggywalky-bucket.s3.ap-northeast-2.amazonaws.com/basic_board_image.jpg");
+    BASIC_JOB_POST_IMAGE("https://doggywalky-bucket.s3.ap-northeast-2.amazonaws.com/basic_board_image.jpg");
 
     private String path;
 }

@@ -131,4 +131,9 @@ public class MemberService {
 
 
     }
+
+    public Member findByMemberId(Long memberId){
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NOT_FOUND));
+    }
 }
