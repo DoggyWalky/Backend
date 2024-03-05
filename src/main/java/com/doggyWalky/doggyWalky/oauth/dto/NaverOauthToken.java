@@ -2,9 +2,11 @@ package com.doggyWalky.doggyWalky.oauth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class NaverOauthToken {
     private String access_token;
     private int expires_in;
