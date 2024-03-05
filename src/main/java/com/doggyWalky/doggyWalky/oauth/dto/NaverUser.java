@@ -2,11 +2,13 @@ package com.doggyWalky.doggyWalky.oauth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
 @ToString
+@NoArgsConstructor
 public class NaverUser {
     public String id;
     public String age;
