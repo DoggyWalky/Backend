@@ -28,4 +28,26 @@ public class ChatRoomMessage {
                 .build();
     }
 
+    public static ChatRoomMessage quitChatRoom(Long senderId, Long receiverId, Long chatRoomId) {
+        return ChatRoomMessage
+                .builder()
+                .chatRoomId(chatRoomId)
+                .senderId(senderId)
+                .receiverId(receiverId)
+                .jobPostId(null)
+                .type(Type.QUIT)
+                .build();
+    }
+
+    public static ChatRoomMessage unvisibleChatRoom(Long senderId, Long receiverId, Long chatRoomId) {
+        return ChatRoomMessage
+                .builder()
+                .chatRoomId(chatRoomId)
+                .senderId(senderId)
+                .receiverId(receiverId)
+                .jobPostId(null)
+                .type(Type.UNVISIBLE)
+                .build();
+    }
+
 }
