@@ -5,6 +5,7 @@ import com.doggyWalky.doggyWalky.security.redis.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -73,7 +74,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.GET,"/**.css", "/**.js", "/**.png").permitAll()
                         .anyRequest().authenticated());
 
@@ -106,6 +107,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Order
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> {

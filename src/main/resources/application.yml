@@ -35,8 +35,8 @@ spring:
   security:
     oauth2:
       naver:
-        client-id: ENC(wLlEYfWt/vCsszkNDWs12dwvMW8smB/4CVCrMmz+GW0=)
-        client-secret: ENC(WeL9MbSlLQuGFis/eRcFjyaiqmECqKVy)
+        client-id: ENC(tPBE9R/ONOg5dH607c3KWprUJNZF1zmI1vN8xq8gxKw=)
+        client-secret: ENC(qWEoJk7+qLxOQw+i1pJOviFV/JNgFq2D)
         scope: name,email,age,gender,birthday,birthyear,mobile
         client-name: Naver
         authorization-grant-type: authorization_code
@@ -77,7 +77,11 @@ cloud:
 #    org.hibernate.SQL: debug
 #    org.hibernate.type: trace
 #    p6spy: DEBUG
-
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
 
 ## p6spy query logging
 decorator:

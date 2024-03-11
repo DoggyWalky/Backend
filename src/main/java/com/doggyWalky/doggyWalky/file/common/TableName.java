@@ -7,5 +7,5 @@ public enum TableName {
 
     MEMBER_PROFILE_INFO,
     DOG,
-    BOARD
+    JOB_POST
 }

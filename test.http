@@ -1,0 +1,27 @@
+GET localhost:8080/removeToken
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMCIsImV4cCI6MTcxMDc0NzUzMH0.ONmpWOgvjEAwvD6GZ1KQvI2tX5JG-jqE-olIJz43CmYTztaqi478oJQlA46wPwv8yL-Fka5Y4nCcmDgs-XlMZQ
+
+###
+
+GET localhost:8080/members
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMCIsImlwQWRkcmVzcyI6IlNNS1V0MjV1SXI2b3B3VkE3RmJEeVpHRVlTUXpVSUxPcDNMTHRYc2ttMzZjOTAvM3NPTVZHVjB3NjJSZVkzdTFNanNLWmtnWmkwRTdrVG1rczcvam9BPT0iLCJleHAiOjE3MTA3NDc1MzB9.FXJaB6xSRv1enc-t1P327uAJjOor0VRj9VKpYPDbhrD4ifgJqw0O0qg2eo5YVu103q7YfLoifC0H9jdQUkPfrA
+
+
+###
+POST http://localhost:8080/api/job-post/register
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyMCIsImlwQWRkcmVzcyI6IlNNS1V0MjV1SXI2b3B3VkE3RmJEeVpHRVlTUXpVSUxPcDNMTHRYc2ttMzZjOTAvM3NPTVZHVjB3NjJSZVkzdTFNanNLWmtnWmkwRTdrVG1rczcvam9BPT0iLCJleHAiOjE3MTA3NDc1MzB9.FXJaB6xSRv1enc-t1P327uAJjOor0VRj9VKpYPDbhrD4ifgJqw0O0qg2eo5YVu103q7YfLoifC0H9jdQUkPfrA
+
+{
+  "title": "test1",
+  "content": "Test2",
+  "status": 0,
+  "images": ["test"],
+  "startPoint": "start",
+  "endPoint": "end",
+  "dogId": 1
+}
+
+
