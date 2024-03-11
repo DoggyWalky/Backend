@@ -25,4 +25,10 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     @Query("select new com.doggyWalky.doggyWalky.file.dto.response.FileResponseDto(f.id,f.size,f.path,f.fileName,f.createdAt,fi.id) from FileInfo fi " +
             "join fi.file f where fi.tableName = :tableName and fi.tableKey =:tableKey and fi.deletedAt is null")
     List<FileResponseDto> findFilesByTableInfo(@Param("tableName") TableName tableName, @Param("tableKey") Long tableKey);
+
+    @Query(value = "select fi from file_info fi join file f on fi.file_id=f.file_id where fi.delete_at <= DATE_SUB(CONVERT_TZ(now(),'+00:00', '+09:00'), INTERVAL 3 MONTH)", nativeQuery = true)
+    List<FileInfo> findDeletedFileInfo();
+
+    @Query("delete from FileInfo fi where fi.id = :fileInfoId")
+    void hardDeleteFileInfo(@Param("fileInfoId") Long fileInfoId);
 }
