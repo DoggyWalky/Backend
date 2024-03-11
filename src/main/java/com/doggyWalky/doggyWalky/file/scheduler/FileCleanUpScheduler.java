@@ -1,8 +1,8 @@
 package com.doggyWalky.doggyWalky.file.scheduler;
 
 import com.doggyWalky.doggyWalky.file.common.component.FileHandler;
+import com.doggyWalky.doggyWalky.file.dto.schedule.DeletedFileInfo;
 import com.doggyWalky.doggyWalky.file.entity.File;
-import com.doggyWalky.doggyWalky.file.entity.FileInfo;
 import com.doggyWalky.doggyWalky.file.repository.FileInfoRepository;
 import com.doggyWalky.doggyWalky.file.repository.FileRepository;
 import com.doggyWalky.doggyWalky.file.service.FileService;
@@ -40,9 +40,11 @@ public class FileCleanUpScheduler {
         // 삭제해야할 파일 정보 찾기
         // Mysql RDS 인스턴스 타임존 설정을 UTC로 해서 쿼리상으로 KST 시간으로 변환해줬다
         log.info("소프트 삭제 후 3개월 지난 파일 정보 및 관련 데이터 정기 삭제 스케줄러 동작");
-        List<FileInfo> deletedFileInfos = fileInfoRepository.findDeletedFileInfo();
-        for (FileInfo fileInfo: deletedFileInfos) {
-            File findFile = fileService.findFile(fileInfo.getFile().getId());
+        List<DeletedFileInfo> deletedFileInfos = fileInfoRepository.findDeletedFileInfo();
+        log.info("삭제 대상 파일 Info size: " + deletedFileInfos.size());
+        // TODO: 성능 개선을 위해 Spring Batch 혹은 벌크 연산을 이용하는 것이 좋아보인다
+        for (DeletedFileInfo fileInfo: deletedFileInfos) {
+            File findFile = fileService.findFile(fileInfo.getFileId());
 
             // 파일, 파일 정보 테이블 delete 로직
             fileInfoRepository.hardDeleteFileInfo(fileInfo.getId());
@@ -66,7 +68,8 @@ public class FileCleanUpScheduler {
         // 삭제해야할 파일 찾기
         log.info("파일 정기 삭제 스케줄러 동작");
         List<File> filesToCleanUp = fileRepository.findFilesWithNoFileInfo();
-
+        log.info("정기 삭제 대상 파일 size : " + filesToCleanUp.size());
+        // TODO: 성능 개선을 위해 Spring Batch 혹은 벌크 연산을 이용하는 것이 좋아보인다
         for (File file: filesToCleanUp) {
             // 파일 테이블 delete 로직
             fileRepository.hardDeleteFile(file.getId());
