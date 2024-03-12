@@ -41,7 +41,10 @@ public enum ErrorCode {
     FILE_STORAGE_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "File storage failed"),
 
     // JobPost
-    JOBPOST_NOT_FOUND(HttpStatus.NOT_FOUND, "JobPost not founded");
+    JOBPOST_NOT_FOUND(HttpStatus.NOT_FOUND, "JobPost not founded"),
+
+    // Report
+    INCORRECT_FORMAT_REPORTCONTENT(HttpStatus.UNPROCESSABLE_ENTITY, "ReportContent format is Incorrect");
 
 
     private HttpStatus status;

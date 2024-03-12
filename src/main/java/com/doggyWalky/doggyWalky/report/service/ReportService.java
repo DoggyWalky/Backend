@@ -6,12 +6,16 @@ import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.repository.JobPostRepository;
 import com.doggyWalky.doggyWalky.member.entity.Member;
 import com.doggyWalky.doggyWalky.member.repository.MemberRepository;
+import com.doggyWalky.doggyWalky.report.dto.condition.ReportSearchCondition;
 import com.doggyWalky.doggyWalky.report.dto.request.ReportRequestDto;
+import com.doggyWalky.doggyWalky.report.dto.response.ReportResponseDto;
 import com.doggyWalky.doggyWalky.report.dto.response.SimpleReportResponseDto;
 import com.doggyWalky.doggyWalky.report.entity.Report;
 import com.doggyWalky.doggyWalky.report.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,5 +45,9 @@ public class ReportService {
         reportRepository.save(report);
 
         return new SimpleReportResponseDto(report.getId());
+    }
+
+    public Page<ReportResponseDto> getReportList(ReportSearchCondition condition, Pageable pageable) {
+        return reportRepository.searchReportList(condition, pageable);
     }
 }

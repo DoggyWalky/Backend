@@ -1,5 +1,6 @@
 package com.doggyWalky.doggyWalky.report.dto.request;
 
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ public class ReportRequestDto {
 
     private Long jobPostId;
 
+    @Size(min = 20, max = 500)
     private String reportContent;
 
     private  Type type;

@@ -39,14 +39,18 @@ public class JobPost extends BaseEntity {
 
     private String defaultImage;
 
+    @Column(name="deleted_yn")
+    private Boolean deletedYn;
+
     @Builder
-    public JobPost(String title, String content, Status status, String startPoint, String endPoint, Long dogId) {
+    public JobPost(String title, String content, Status status, String startPoint, String endPoint, Long dogId, Boolean deletedYn) {
         this.title = title;
         this.content = content;
         this.status = status;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.dogId = dogId;
+        this.deletedYn = deletedYn;
     }
 
     public void assignWriter(Member member){

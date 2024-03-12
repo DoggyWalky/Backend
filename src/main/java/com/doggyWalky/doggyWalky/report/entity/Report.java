@@ -34,6 +34,7 @@ public class Report {
     private JobPost jobPost;
 
     @Column(name="report_type")
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     @Column(name="report_content")

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface JobPostRepository extends JpaRepository<JobPost,Long> {
 
-    // Todo: deleteYn 조건 넣기
-    @Query("select jp from JobPost jp where jp.id = :jobPostId")
+
+    @Query("select jp from JobPost jp where jp.id = :jobPostId and jp.deletedYn=false")
     Optional<JobPost> findJobPostByIdNotDeleted(@Param("jobPostId") Long jobPostId);
 }
