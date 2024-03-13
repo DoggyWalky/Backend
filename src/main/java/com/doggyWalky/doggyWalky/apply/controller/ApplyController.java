@@ -21,6 +21,7 @@ public class ApplyController {
     /**
      * 신청 등록하기
      */
+    // Todo: 테스트 미완료
     @PostMapping("/apply")
     public ResponseEntity<SimpleApplyResponseDto> apply(@RequestBody NewApplyRequestDto requestDto, Principal principal) {
         Long workerId = Long.parseLong(principal.getName());
@@ -31,7 +32,7 @@ public class ApplyController {
     /**
      * 신청 목록 조회하기
      */
-    // Todo: 페이징 처리하기
+    // Todo: 페이징 처리하기, 테스트 미완료
     @GetMapping("/apply/jobPost/{jobPostId}")
     public ResponseEntity<List<ApplyResponseDto>> getApplyList(@PathVariable Long jobPostId, Principal principal) {
         Long memberId = Long.parseLong(principal.getName());

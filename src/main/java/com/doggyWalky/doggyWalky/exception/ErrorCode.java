@@ -49,7 +49,8 @@ public enum ErrorCode {
 
     // Apply
     INCORRECT_MATCH_WRITER(HttpStatus.BAD_REQUEST, "Incorrect Apply"),
-    ALREADY_REGISTERED_APPLY(HttpStatus.BAD_REQUEST, "Already register Apply");
+    ALREADY_REGISTERED_APPLY(HttpStatus.BAD_REQUEST, "Already register Apply"),
+    NOT_APPLY_SELF(HttpStatus.BAD_REQUEST, "Do not apply yourself");
 
 
     private HttpStatus status;

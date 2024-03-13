@@ -44,6 +44,11 @@ public class ApplyService {
             throw new ApplicationException(ErrorCode.INCORRECT_MATCH_WRITER);
         }
 
+        // 게시글 작성자가 신청한건지 확인
+        if (jobPost.getMember().getId()==workerId) {
+            throw new ApplicationException(ErrorCode.NOT_APPLY_SELF);
+        }
+
         // 해당 게시글에 대한 신청 여부 확인
         applyRepository.findDuplicateApply(jobPost.getId(), workerId).ifPresent(apply -> {throw new ApplicationException(ErrorCode.ALREADY_REGISTERED_APPLY);});
 
