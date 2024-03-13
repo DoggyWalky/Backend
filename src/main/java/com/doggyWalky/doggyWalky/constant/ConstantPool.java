@@ -30,6 +30,11 @@ public class ConstantPool {
         KAKAO
     }
 
+    // 신청 수락 여부
+    public enum ApplyStatus {
+        ACCEPT, REFUSE, WAIT
+    }
+
     // 이미지 타입
     public static List<String> imageExtList = List.of("jpg", "jpeg", "gif", "png");
 
