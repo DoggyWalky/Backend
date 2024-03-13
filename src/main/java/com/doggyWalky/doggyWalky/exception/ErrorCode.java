@@ -42,9 +42,14 @@ public enum ErrorCode {
 
     // JobPost
     JOBPOST_NOT_FOUND(HttpStatus.NOT_FOUND, "JobPost not founded"),
+    NOT_JOBPOST_WRITER(HttpStatus.FORBIDDEN, "Not JobPost Writer"),
 
     // Report
-    INCORRECT_FORMAT_REPORTCONTENT(HttpStatus.UNPROCESSABLE_ENTITY, "ReportContent format is Incorrect");
+    INCORRECT_FORMAT_REPORTCONTENT(HttpStatus.UNPROCESSABLE_ENTITY, "ReportContent format is Incorrect"),
+
+    // Apply
+    INCORRECT_MATCH_WRITER(HttpStatus.BAD_REQUEST, "Incorrect Apply"),
+    ALREADY_REGISTERED_APPLY(HttpStatus.BAD_REQUEST, "Already register Apply");
 
 
     private HttpStatus status;
