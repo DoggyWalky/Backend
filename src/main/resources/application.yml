@@ -5,7 +5,10 @@ spring:
       hibernate:
         #        show_sql: true 시스템아웃을 통해 찍음
         format_sql: true
-## 순환 참조 에러 제거
+        jdbc:
+          batch_size: 200
+
+  ## 순환 참조 에러 제거
   main:
     allow-circular-references: true
 ## Mysql 상세 지정
