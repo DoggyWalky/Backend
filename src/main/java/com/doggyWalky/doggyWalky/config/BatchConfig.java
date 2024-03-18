@@ -9,7 +9,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -43,6 +45,8 @@ public class BatchConfig {
 
     private final GpsProcessor gpsProcessor;
 
+    private final StepExecutionListener GpsStepListener;
+
 
     @Bean
     public Job myJob(Step step) {
@@ -54,10 +58,11 @@ public class BatchConfig {
     @Bean
     public Step step() throws JsonProcessingException {
         return new StepBuilder("gpsStep", this.jobRepository)
-                .<GpsRequestDto, Gps>chunk(10,platformTransactionManager)
+                .<GpsRequestDto, Gps>chunk(10, platformTransactionManager)
                 .reader(itemReader(null))
                 .processor(gpsProcessor)
                 .writer(gpsWriter)
+                .listener(GpsStepListener)
                 .build();
     }
 
