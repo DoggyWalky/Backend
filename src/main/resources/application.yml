@@ -37,7 +37,7 @@ spring:
     redis:
       host: localhost
       port: 6379
-
+      password: ENC(szHCGTXmuiXGHe2L40+LSA==)
 # Oauth 설정
   security:
     oauth2:
