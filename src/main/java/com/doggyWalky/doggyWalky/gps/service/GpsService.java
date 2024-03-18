@@ -23,11 +23,11 @@ public class GpsService {
 
     private final GpsRepository gpsRepository;
 
+
     /**
      * Geolocation API를 통해 받은 gps 정보 저장
      */
     public void saveGpsList(List<GpsRequestDto> gpsList) {
-
         List<Gps> gpsEntityList = gpsList.stream().map(gps -> {
             LocalDateTime coordinateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(gps.getTimestamp()), ZoneId.systemDefault());
             return new Gps(gps, coordinateTime);

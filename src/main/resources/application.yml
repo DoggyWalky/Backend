@@ -7,7 +7,11 @@ spring:
         format_sql: true
         jdbc:
           batch_size: 200
-
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
   ## 순환 참조 에러 제거
   main:
     allow-circular-references: true
