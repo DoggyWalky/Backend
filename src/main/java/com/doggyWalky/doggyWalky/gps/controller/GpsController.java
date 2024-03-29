@@ -49,9 +49,9 @@ public class GpsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/gps/jobpost/{jobpostId}")
-    public ResponseEntity getGpsList(@PathVariable Long jobpostId) {
-        List<GpsResponseDto> gpsList = gpsService.getGpsList(jobpostId);
+    @GetMapping("/gps/jobPost/{jobPostId}")
+    public ResponseEntity getGpsList(@PathVariable Long jobPostId) {
+        List<GpsResponseDto> gpsList = gpsService.getGpsList(jobPostId);
         return new ResponseEntity(gpsList, HttpStatus.OK);
     }
 }
