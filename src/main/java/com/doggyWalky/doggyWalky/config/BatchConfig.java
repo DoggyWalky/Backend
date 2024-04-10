@@ -23,6 +23,8 @@ import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -63,8 +65,16 @@ public class BatchConfig {
                 .processor(gpsProcessor)
                 .writer(gpsWriter)
                 .listener(GpsStepListener)
+                .taskExecutor(taskExecutor())
                 .build();
     }
+    @Bean
+    public TaskExecutor taskExecutor() {
+        SimpleAsyncTaskExecutor asyncTaskExecutor = new SimpleAsyncTaskExecutor();
+        asyncTaskExecutor.setConcurrencyLimit(5); // 동시에 실행할 최대 스레드 수
+        return asyncTaskExecutor;
+    }
+
 
     @Bean
     @StepScope

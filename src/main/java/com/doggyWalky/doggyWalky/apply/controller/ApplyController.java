@@ -40,5 +40,8 @@ public class ApplyController {
         return new ResponseEntity<>(applyList, HttpStatus.OK);
     }
 
+    // Todo: 내가 신청한 목록 보여주기 API 작성
+
+
 
 }
