@@ -17,12 +17,15 @@ public class RegisterDogRequest {
 
     private String name;
 
+    private String kind;
+
     public Dog toEntity(Member member) {
         return Dog.builder()
                 .weight(this.weight)
                 .description(this.description)
                 .name(this.name)
                 .member(member)
+                .kind(this.kind)
                 .build();
     }
 

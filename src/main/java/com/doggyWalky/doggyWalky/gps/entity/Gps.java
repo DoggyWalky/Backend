@@ -36,4 +36,5 @@ public class Gps {
         this.jobPostId = dto.getJobPostId();
         this.coordinate_time = coordinate_time;
     }
+
 }

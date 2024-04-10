@@ -41,7 +41,6 @@ public class JobPostService {
         jobPost.assignWriter(member);
         JobPost savedJobPost = jobPostRepository.save(jobPost);
 
-
         if (images != null && !images.isEmpty() && images.get(0).getOriginalFilename().length()!=0) {
 
             saveImages(images, savedJobPost);
@@ -50,6 +49,7 @@ public class JobPostService {
             savedJobPost.setDefaultImage(BasicImage.BASIC_JOB_POST_IMAGE.getPath());
 
             jobPostRepository.save(savedJobPost);
+
         }
         return new JobPostRegisterResponse(savedJobPost);
     }
@@ -69,6 +69,9 @@ public class JobPostService {
         fileService.saveFileInfoList(fileInfos);
 
     }
+
+
+
 
 
 }
