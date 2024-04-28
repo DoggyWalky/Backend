@@ -46,6 +46,7 @@ public enum ErrorCode {
 
     // Report
     INCORRECT_FORMAT_REPORTCONTENT(HttpStatus.UNPROCESSABLE_ENTITY, "ReportContent format is Incorrect"),
+    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "Report not founded"),
 
     // Apply
     INCORRECT_MATCH_WRITER(HttpStatus.BAD_REQUEST, "Incorrect Apply"),
