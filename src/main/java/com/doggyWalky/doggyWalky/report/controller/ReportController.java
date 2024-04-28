@@ -1,8 +1,10 @@
 package com.doggyWalky.doggyWalky.report.controller;
 
+import com.doggyWalky.doggyWalky.chat.dto.response.ChatMessageResponse;
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
 import com.doggyWalky.doggyWalky.report.dto.condition.ReportSearchCondition;
+import com.doggyWalky.doggyWalky.report.dto.request.ChatReportRequestDto;
 import com.doggyWalky.doggyWalky.report.dto.request.ReportRequestDto;
 import com.doggyWalky.doggyWalky.report.dto.response.ReportResponseDto;
 import com.doggyWalky.doggyWalky.report.dto.response.SimpleReportResponseDto;
@@ -18,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,5 +43,13 @@ public class ReportController {
     @GetMapping("/reports")
     public Page<ReportResponseDto> getReportList(ReportSearchCondition condition, @PageableDefault Pageable pageable) {
         return reportService.getReportList(condition, pageable);
+    }
+
+    @GetMapping("/reports/{reportId}/chatList")
+    public ResponseEntity getChatListForReports(@PathVariable("reportId") Long reportId,
+                                                @RequestBody ChatReportRequestDto dto) {
+        List<ChatMessageResponse> chatLists = reportService.getChatListForReports(dto, reportId);
+        return new ResponseEntity(chatLists, HttpStatus.OK);
+
     }
 }

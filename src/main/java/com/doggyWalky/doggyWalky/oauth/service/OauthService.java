@@ -18,6 +18,7 @@ import com.doggyWalky.doggyWalky.security.jwt.RefreshTokenProvider;
 import com.doggyWalky.doggyWalky.security.jwt.SymmetricCrypto;
 import com.doggyWalky.doggyWalky.security.jwt.TokenProvider;
 import com.doggyWalky.doggyWalky.security.redis.RedisService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -62,6 +64,8 @@ public class OauthService {
 
     private final RefreshTokenProvider refreshTokenProvider;
 
+    private final RestTemplate restTemplate;
+
 
 
     public void request(SocialLoginType socialLoginType) throws IOException {
@@ -78,7 +82,7 @@ public class OauthService {
     }
 
     @Transactional
-    public String oauthLogin(ConstantPool.SocialLoginType socialLoginType, String code,HttpHeaders httpHeaders ,HttpServletRequest request) throws IOException {
+    public void oauthLogin(ConstantPool.SocialLoginType socialLoginType, String code ,HttpServletRequest request) throws IOException {
         switch (socialLoginType) {
             case NAVER -> {
                 // 네이버로 일회성 코드를 보내 액세스 토큰이 담긴 응답객체를 받아온다
@@ -129,8 +133,17 @@ public class OauthService {
                 String jwt = tokenProvider.createToken(authentication);
                 String refresh = refreshTokenProvider.createToken(authentication, ipAddress);
 
-                httpHeaders.add(AUTHORIZATION_HEADER, "Bearer " + jwt);
-                httpHeaders.add(REFRESH_HEADER, "Bearer " + refresh);
+                Cookie jwtCookie = new Cookie(AUTHORIZATION_HEADER,  jwt);
+                jwtCookie.setHttpOnly(true);
+                jwtCookie.setSecure(true);
+                jwtCookie.setPath("/");
+                response.addCookie(jwtCookie);
+
+                Cookie refreshCookie = new Cookie(REFRESH_HEADER,  refresh);
+                refreshCookie.setHttpOnly(true);
+                refreshCookie.setSecure(true);
+                refreshCookie.setPath("/");
+                response.addCookie(refreshCookie);
 
                 // REDIS에 Refresh Token 저장
                 try {
@@ -140,9 +153,8 @@ public class OauthService {
                 } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
                     throw new ApplicationException(ErrorCode.CRYPT_ERROR);
                 }
-                // ----------------------------------------------------------
 
-                return authentication.getName();
+
 
             }
             default -> {

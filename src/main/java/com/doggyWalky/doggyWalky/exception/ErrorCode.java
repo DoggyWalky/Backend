@@ -44,7 +44,8 @@ public enum ErrorCode {
     JOBPOST_NOT_FOUND(HttpStatus.NOT_FOUND, "JobPost not founded"),
 
     // Report
-    INCORRECT_FORMAT_REPORTCONTENT(HttpStatus.UNPROCESSABLE_ENTITY, "ReportContent format is Incorrect");
+    INCORRECT_FORMAT_REPORTCONTENT(HttpStatus.UNPROCESSABLE_ENTITY, "ReportContent format is Incorrect"),
+    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "Report not founded");
 
 
     private HttpStatus status;

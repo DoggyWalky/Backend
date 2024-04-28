@@ -16,7 +16,7 @@ spring:
   datasource:
     url: ENC(ve8nX3UyUztK39L1bwLNSNpSIUFU6hijhPp/nLchG1bz/R0xWo65JMW1Q61dPzMlZHHItkFOq2jqunsAb1IQKDr8WOqKXArwbQjwhZmW1r/5rSMNLfgVG5Vqp0EG75Obujt+eMcMng4=)
     username: ENC(CRtDDOYA5iA58jbdUQN+Zw==)
-    password: ENC(fc3Nv75og6+jpPgiFDF7TvRpABTMLK+v)
+    password: ENC(iuvYDPplQkEgB7ckTufyCRrmSDHBeOma)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 ## 파일 크기 지정
@@ -30,13 +30,14 @@ spring:
     redis:
       host: localhost
       port: 6379
+      password: ENC(oIZ4bIZiFdpQI13RUDd0Fw==)
 
 # Oauth 설정
   security:
     oauth2:
       naver:
-        client-id: ENC(tPBE9R/ONOg5dH607c3KWprUJNZF1zmI1vN8xq8gxKw=)
-        client-secret: ENC(qWEoJk7+qLxOQw+i1pJOviFV/JNgFq2D)
+        client-id: ENC(3dgcJo96iBNBLoy9sR8BOfRKIt1cWNoi4Gj432CFZ08=)
+        client-secret: ENC(4O7RCG1S9fnlDxZX6jtUhyAmEUFAq4B2)
         scope: name,email,age,gender,birthday,birthyear,mobile
         client-name: Naver
         authorization-grant-type: authorization_code
