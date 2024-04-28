@@ -67,5 +67,6 @@ public class ReportService {
 
         return reportRepository.getChatMessagesForReport(dto.getReporterId(), dto.getTargetId(), dto.getJobPostId());
 
+
     }
 }

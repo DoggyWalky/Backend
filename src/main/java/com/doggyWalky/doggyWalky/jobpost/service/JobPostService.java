@@ -8,12 +8,15 @@ import com.doggyWalky.doggyWalky.file.entity.FileInfo;
 import com.doggyWalky.doggyWalky.file.service.FileService;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterRequest;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterResponse;
+import com.doggyWalky.doggyWalky.jobpost.dto.JobPostSearchCriteria;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.repository.JobPostRepository;
+import com.doggyWalky.doggyWalky.jobpost.repository.JobPostSpecifications;
 import com.doggyWalky.doggyWalky.member.entity.Member;
 import com.doggyWalky.doggyWalky.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +44,6 @@ public class JobPostService {
         jobPost.assignWriter(member);
         JobPost savedJobPost = jobPostRepository.save(jobPost);
 
-
         if (images != null && !images.isEmpty() && images.get(0).getOriginalFilename().length()!=0) {
 
             saveImages(images, savedJobPost);
@@ -50,8 +52,19 @@ public class JobPostService {
             savedJobPost.setDefaultImage(BasicImage.BASIC_JOB_POST_IMAGE.getPath());
 
             jobPostRepository.save(savedJobPost);
+
         }
         return new JobPostRegisterResponse(savedJobPost);
+    }
+
+    public List<JobPost> searchJobPosts(JobPostSearchCriteria criteria) {
+        return jobPostRepository.findAll(Specification.where(
+                JobPostSpecifications.withDynamicQuery(
+                        criteria.getTitle(),
+                        criteria.getStatus(),
+                        criteria.getStartPoint()
+                )
+        ));
     }
 
 
@@ -69,6 +82,9 @@ public class JobPostService {
         fileService.saveFileInfoList(fileInfos);
 
     }
+
+
+
 
 
 }

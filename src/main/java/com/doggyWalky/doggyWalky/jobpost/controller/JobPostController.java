@@ -2,6 +2,9 @@ package com.doggyWalky.doggyWalky.jobpost.controller;
 
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterRequest;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterResponse;
+import com.doggyWalky.doggyWalky.jobpost.dto.JobPostSearchCriteria;
+import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
+import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.service.JobPostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +22,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class JobPostController {
-
     private final JobPostService jobPostService;
     private final ObjectMapper objectMapper;
 
@@ -41,6 +43,20 @@ public class JobPostController {
             log.error("게시글 등록 실패: {}, error: {}", memberId, e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<JobPost>> searchJobPosts(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String startPoint) {
+        JobPostSearchCriteria criteria = new JobPostSearchCriteria();
+        criteria.setTitle(title);
+        criteria.setStatus(status != null ? Status.valueOf(status) : null);
+        criteria.setStartPoint(startPoint);
+
+        List<JobPost> jobPosts = jobPostService.searchJobPosts(criteria);
+        return ResponseEntity.ok(jobPosts);
     }
 
 }

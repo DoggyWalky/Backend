@@ -42,11 +42,19 @@ public enum ErrorCode {
 
     // JobPost
     JOBPOST_NOT_FOUND(HttpStatus.NOT_FOUND, "JobPost not founded"),
+    NOT_JOBPOST_WRITER(HttpStatus.FORBIDDEN, "Not JobPost Writer"),
 
     // Report
     INCORRECT_FORMAT_REPORTCONTENT(HttpStatus.UNPROCESSABLE_ENTITY, "ReportContent format is Incorrect"),
-    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "Report not founded");
+    REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "Report not founded"),
 
+    // Apply
+    INCORRECT_MATCH_WRITER(HttpStatus.BAD_REQUEST, "Incorrect Apply"),
+    ALREADY_REGISTERED_APPLY(HttpStatus.BAD_REQUEST, "Already register Apply"),
+    NOT_APPLY_SELF(HttpStatus.BAD_REQUEST, "Do not apply yourself"),
+
+    //Dog
+    DOG_NOT_FOUND(HttpStatus.NOT_FOUND, "Dog not founded");
 
     private HttpStatus status;
     private String message;
