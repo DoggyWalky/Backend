@@ -18,6 +18,10 @@ public enum ErrorCode {
 
     CRYPT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Crypt error"),
 
+    // AUTHORITY
+
+    AUTHORITY_NOT_FOUND(HttpStatus.NOT_FOUND, "Authority not founded"),
+
     // TOKEN
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"User Authentication is failed"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "Token is invalid"),

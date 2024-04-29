@@ -2,6 +2,8 @@ package com.doggyWalky.doggyWalky.security.jwt;
 
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
+import com.doggyWalky.doggyWalky.member.repository.MemberRepository;
+import com.doggyWalky.doggyWalky.security.auth.MemberDetails;
 import com.doggyWalky.doggyWalky.security.exception.ExpiredTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -25,11 +27,15 @@ public class TokenProvider implements InitializingBean {
     private final long tokenValidityInMilliseconds;
     private Key key;
 
+    private final MemberRepository memberRepository;
+
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+            MemberRepository memberRepository) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -60,9 +66,9 @@ public class TokenProvider implements InitializingBean {
                 .getBody();
 
         // 서버에서 사용하는 Principal 객체에는 member의 pk 값만 저장해서 사용한다.
-        User principal = new User(claims.getSubject(), "", new ArrayList<>());
+        MemberDetails principal = new MemberDetails(memberRepository.findById(Long.parseLong(claims.getSubject())).get());
 
-        return new UsernamePasswordAuthenticationToken(principal, token, new ArrayList<>());
+        return new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
     }
 
 
