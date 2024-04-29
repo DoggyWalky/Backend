@@ -1,8 +1,10 @@
 package com.doggyWalky.doggyWalky.jobpost.controller;
 
+import com.amazonaws.Response;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterRequest;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterResponse;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostSearchCriteria;
+import com.doggyWalky.doggyWalky.jobpost.dto.JobPostSimpleResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.service.JobPostService;
@@ -57,6 +59,16 @@ public class JobPostController {
 
         List<JobPost> jobPosts = jobPostService.searchJobPosts(criteria);
         return ResponseEntity.ok(jobPosts);
+    }
+
+    /**
+     * 산책 종료하기
+     */
+    @PostMapping("/{jobPostId}/walkComplete")
+    public ResponseEntity<JobPostSimpleResponseDto> walkComplete(@PathVariable Long jobPostId, Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        JobPostSimpleResponseDto dto = jobPostService.setWalkingComplete(memberId, jobPostId);
+        return new ResponseEntity(dto,HttpStatus.OK);
     }
 
 }

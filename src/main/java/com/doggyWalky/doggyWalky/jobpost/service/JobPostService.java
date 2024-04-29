@@ -1,5 +1,7 @@
 package com.doggyWalky.doggyWalky.jobpost.service;
 
+import com.doggyWalky.doggyWalky.exception.ApplicationException;
+import com.doggyWalky.doggyWalky.exception.ErrorCode;
 import com.doggyWalky.doggyWalky.file.common.BasicImage;
 import com.doggyWalky.doggyWalky.file.common.TableName;
 import com.doggyWalky.doggyWalky.file.dto.response.FileResponseDto;
@@ -9,7 +11,9 @@ import com.doggyWalky.doggyWalky.file.service.FileService;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterRequest;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterResponse;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostSearchCriteria;
+import com.doggyWalky.doggyWalky.jobpost.dto.JobPostSimpleResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
+import com.doggyWalky.doggyWalky.jobpost.entity.WalkingProcessStatus;
 import com.doggyWalky.doggyWalky.jobpost.repository.JobPostRepository;
 import com.doggyWalky.doggyWalky.jobpost.repository.JobPostSpecifications;
 import com.doggyWalky.doggyWalky.member.entity.Member;
@@ -67,6 +71,22 @@ public class JobPostService {
         ));
     }
 
+    /**
+     * 게시글 산책 진행 상태 완료 변경 로직
+     */
+    @Transactional
+    public JobPostSimpleResponseDto setWalkingComplete(Long memberId, Long jobPostId) {
+        JobPost jobPost = jobPostRepository.findJobPostByIdNotDeleted(jobPostId).orElseThrow(() -> new ApplicationException(ErrorCode.JOBPOST_NOT_FOUND));
+
+        // 해당 게시글 작성자가 아닐 경우 에러 반환
+        if (jobPost.getMember().getId() != memberId) {
+            throw new ApplicationException(ErrorCode.NOT_JOBPOST_WRITER);
+        }
+
+        jobPost.setWalkingStatus(WalkingProcessStatus.POSTWALK);
+        return new JobPostSimpleResponseDto(jobPost.getId());
+    }
+
 
     private void saveImages(List<MultipartFile> images, JobPost savedJobPost) {
 
@@ -82,6 +102,7 @@ public class JobPostService {
         fileService.saveFileInfoList(fileInfos);
 
     }
+
 
 
 
