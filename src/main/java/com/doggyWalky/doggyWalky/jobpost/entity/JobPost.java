@@ -25,7 +25,13 @@ public class JobPost extends BaseEntity {
 
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="job_offer_status")
     private Status status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="walk_process_status")
+    private WalkingProcessStatus walkingProcessStatus;
 
     @Column(name = "start_point")
     private String startPoint;
@@ -43,10 +49,11 @@ public class JobPost extends BaseEntity {
     private Boolean deletedYn;
 
     @Builder
-    public JobPost(String title, String content, Status status, String startPoint, String endPoint, Long dogId, Boolean deletedYn) {
+    public JobPost(String title, String content, Status status,WalkingProcessStatus walkingProcessStatus, String startPoint, String endPoint, Long dogId, Boolean deletedYn) {
         this.title = title;
         this.content = content;
         this.status = status;
+        this.walkingProcessStatus = walkingProcessStatus;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.dogId = dogId;
@@ -59,6 +66,10 @@ public class JobPost extends BaseEntity {
 
     public void setDefaultImage(String path){
         this.defaultImage = path;
+    }
+
+    public void setWalkingStatus(WalkingProcessStatus processStatus) {
+        this.walkingProcessStatus = processStatus;
     }
 
 }
