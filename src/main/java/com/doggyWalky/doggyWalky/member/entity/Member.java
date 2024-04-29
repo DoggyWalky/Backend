@@ -18,13 +18,18 @@ public class Member {
     private String email;
     private String name;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="role_id")
+    private Role role;
+
     private LocalDateTime createdAt;
 
     private boolean deletedYn;
 
-    public Member(String email,String name) {
+    public Member(String email,String name, Role role) {
         this.email = email;
         this.name = name;
+        this.role = role;
         this.createdAt = LocalDateTime.now();
         this.deletedYn = false;
     }

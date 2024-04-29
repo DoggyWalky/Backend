@@ -62,7 +62,7 @@ public class MemberController {
      * 회원 프로필 수정
      */
     @PatchMapping("/members/profile")
-    public ResponseEntity<MemberSimpleResponseDto> updateMemberProfile(@Valid @RequestBody MemberPatchProfileDto dto, BindingResult bindingResult,Principal principal) {
+    public ResponseEntity<MemberSimpleResponseDto> updateMemberProfile(@Valid @RequestBody MemberPatchProfileDto dto, BindingResult bindingResult, Principal principal) {
         // Validation 체크
         if (bindingResult.hasErrors()) {
 
@@ -92,4 +92,14 @@ public class MemberController {
         // Todo: Access Token은 요청을 보낸 Axios API에서 쿠키를 삭제하도록 지시한다.
         return new ResponseEntity(new MemberSimpleResponseDto(memberId), HttpStatus.OK);
     }
+
+    /**
+     * 관리자 권한 검사 테스트
+     */
+    @GetMapping("/admin/test")
+    public ResponseEntity test(Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        return new ResponseEntity(memberId, HttpStatus.OK);
+    }
 }
+

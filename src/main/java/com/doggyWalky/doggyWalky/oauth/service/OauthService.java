@@ -7,9 +7,11 @@ import com.doggyWalky.doggyWalky.exception.ErrorCode;
 import com.doggyWalky.doggyWalky.member.entity.Member;
 import com.doggyWalky.doggyWalky.member.entity.MemberProfileInfo;
 import com.doggyWalky.doggyWalky.member.entity.MemberSecretInfo;
+import com.doggyWalky.doggyWalky.member.entity.Role;
 import com.doggyWalky.doggyWalky.member.repository.MemberProfileInfoRepository;
 import com.doggyWalky.doggyWalky.member.repository.MemberRepository;
 import com.doggyWalky.doggyWalky.member.repository.MemberSecretInfoRepository;
+import com.doggyWalky.doggyWalky.member.repository.RoleRepository;
 import com.doggyWalky.doggyWalky.oauth.domain.NaverOauth;
 import com.doggyWalky.doggyWalky.oauth.dto.NaverOauthToken;
 import com.doggyWalky.doggyWalky.oauth.dto.NaverUser;
@@ -64,7 +66,8 @@ public class OauthService {
 
     private final RefreshTokenProvider refreshTokenProvider;
 
-    private final RestTemplate restTemplate;
+    private final RoleRepository roleRepository;
+
 
 
 
@@ -98,7 +101,8 @@ public class OauthService {
                 // 회원가입 처리
                 if (memberRepository.findByEmail(symmetricCrypto.encrypt(naverUser.getEmail())).isEmpty()) {
                     System.out.println("신규 회원");
-                    Member member = new Member(symmetricCrypto.encrypt(naverUser.getEmail()),naverUser.getName());
+                    Role role = roleRepository.findByRoleName(Role.RoleName.USER).orElseThrow(() -> new ApplicationException(ErrorCode.AUTHORITY_NOT_FOUND));
+                    Member member = new Member(symmetricCrypto.encrypt(naverUser.getEmail()),naverUser.getName(),role);
                     Member findMember = memberRepository.save(member);
 
                     MemberProfileInfo memberProfile = new MemberProfileInfo(member);
@@ -127,7 +131,6 @@ public class OauthService {
                 // authenticationToken을 이용해서 Authentication 객체를 생성하려고 authentication 메소드가 실행이 될 때
                 // CustomUserDetailsService의 loadUserByUsername 메소드가 실행된다.
                 Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 // createToken 메소드를 통해서 JWT Token 생성
                 String jwt = tokenProvider.createToken(authentication);
