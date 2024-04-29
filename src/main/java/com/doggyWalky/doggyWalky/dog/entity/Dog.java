@@ -16,7 +16,7 @@ public class Dog extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dogId")
+    @Column(name = "dog_id")
     private Long dogId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,6 +29,8 @@ public class Dog extends BaseEntity {
     private String name;
 
     private String kind;
+
+    private String profileImage;
 
     public void update(String name, String kind, String weight, String description) {
         if (name != null) this.name = name;

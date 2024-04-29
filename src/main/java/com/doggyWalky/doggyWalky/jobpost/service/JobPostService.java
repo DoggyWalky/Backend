@@ -1,5 +1,6 @@
 package com.doggyWalky.doggyWalky.jobpost.service;
 
+import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
 import com.doggyWalky.doggyWalky.file.common.BasicImage;
@@ -8,10 +9,7 @@ import com.doggyWalky.doggyWalky.file.dto.response.FileResponseDto;
 import com.doggyWalky.doggyWalky.file.entity.File;
 import com.doggyWalky.doggyWalky.file.entity.FileInfo;
 import com.doggyWalky.doggyWalky.file.service.FileService;
-import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterRequest;
-import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterResponse;
-import com.doggyWalky.doggyWalky.jobpost.dto.JobPostSearchCriteria;
-import com.doggyWalky.doggyWalky.jobpost.dto.JobPostSimpleResponseDto;
+import com.doggyWalky.doggyWalky.jobpost.dto.*;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.WalkingProcessStatus;
 import com.doggyWalky.doggyWalky.jobpost.repository.JobPostRepository;
@@ -20,6 +18,8 @@ import com.doggyWalky.doggyWalky.member.entity.Member;
 import com.doggyWalky.doggyWalky.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,6 +85,14 @@ public class JobPostService {
 
         jobPost.setWalkingStatus(WalkingProcessStatus.POSTWALK);
         return new JobPostSimpleResponseDto(jobPost.getId());
+    }
+
+    /**
+     * 현재 산책 중인 게시글 목록 조회하기
+     */
+    @Transactional(readOnly = true)
+    public Page<JobPostWalkingResponseDto> getJobPostListOnWalking(Pageable pageable, Long memberId) {
+        return jobPostRepository.findJobPostByWalkProcessStatus(memberId, WalkingProcessStatus.WALKING, ConstantPool.ApplyStatus.ACCEPT, pageable);
     }
 
 
