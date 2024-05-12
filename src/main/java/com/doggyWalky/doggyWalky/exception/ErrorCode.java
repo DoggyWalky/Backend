@@ -57,6 +57,10 @@ public enum ErrorCode {
     ALREADY_REGISTERED_APPLY(HttpStatus.BAD_REQUEST, "Already register Apply"),
     NOT_APPLY_SELF(HttpStatus.BAD_REQUEST, "Do not apply yourself"),
 
+    INVALID_APPLY_PERMISSION(HttpStatus.FORBIDDEN, "Invalid Permission For Apply"),
+
+    ACCEPT_APPLY_EXISTS(HttpStatus.CONFLICT, "There is already a accepted application"),
+
     //Dog
     DOG_NOT_FOUND(HttpStatus.NOT_FOUND, "Dog not founded");
 

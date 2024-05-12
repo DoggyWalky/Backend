@@ -40,8 +40,29 @@ public class ApplyController {
         return new ResponseEntity<>(applyList, HttpStatus.OK);
     }
 
-    // Todo: 내가 신청한 목록 보여주기 API 작성
+    /**
+     * 신청 수락하기
+     */
+    @PostMapping("/apply/{apply-id}/accept")
+    public ResponseEntity<SimpleApplyResponseDto> acceptApply(@PathVariable("apply-id") Long applyId, Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        SimpleApplyResponseDto response = applyService.acceptApply(applyId, memberId);
+        return ResponseEntity.ok(response);
+    }
 
+
+    /**
+     * 신청 거절하기
+     */
+    @PostMapping("/apply/{apply-id}/refuse")
+    public ResponseEntity<SimpleApplyResponseDto> refuseApply(@PathVariable("apply-id") Long applyId, Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        SimpleApplyResponseDto response = applyService.refuseApply(applyId, memberId);
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Todo: 내가 신청한 목록 조회 API 작성
 
 
 }

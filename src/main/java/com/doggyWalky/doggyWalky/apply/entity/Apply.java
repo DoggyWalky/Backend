@@ -39,4 +39,8 @@ public class Apply extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ApplyStatus status;
 
+    public void changeApplyStatus(ApplyStatus status) {
+        this.status = status;
+    }
+
 }
