@@ -19,4 +19,10 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
             "join MemberProfileInfo mpi on a.worker.id = mpi.member.id and mpi.deletedYn=false " +
             "where a.jobPost.id = : jobPostId and a.owner.id =: ownerId and a.owner.deletedYn = false")
     List<ApplyResponseDto> findListAppliedToTheJobPost(@Param("jobPostId") Long jobPostId, @Param("ownerId") Long ownerId);
+
+    @Query("select a from Apply a where a.id = :applyId and a.owner.id = :ownerId")
+    Optional<Apply> findByOwner(@Param("applyId") Long applyId, @Param("ownerId") Long ownerId);
+
+    @Query("select a from Apply a where a.jobPost.id = :jobPostId and a.status = 'ACCEPT'")
+    Optional<Apply> findAcceptedApplyByJobPostId(@Param("jobPostId") Long jobPostId);
 }

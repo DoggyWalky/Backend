@@ -72,4 +72,8 @@ public class JobPost extends BaseEntity {
         this.walkingProcessStatus = processStatus;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
 }

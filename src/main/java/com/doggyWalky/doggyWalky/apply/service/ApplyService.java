@@ -9,6 +9,7 @@ import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
+import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.repository.JobPostRepository;
 import com.doggyWalky.doggyWalky.member.entity.Member;
 import com.doggyWalky.doggyWalky.member.repository.MemberRepository;
@@ -30,6 +31,7 @@ public class ApplyService {
     private final JobPostRepository jobPostRepository;
 
     private final MemberRepository memberRepository;
+
 
     /**
      * 산책 신청 등록하기
@@ -60,6 +62,7 @@ public class ApplyService {
     /**
      * 신청 목록 조회
      */
+    @Transactional(readOnly = true)
     public List<ApplyResponseDto> getApplyList(Long jobPostId, Long memberId) {
         JobPost jobPost = jobPostRepository.findJobPostByIdNotDeleted(jobPostId).orElseThrow(() -> new ApplicationException(ErrorCode.JOBPOST_NOT_FOUND));
 
@@ -69,6 +72,53 @@ public class ApplyService {
         }
 
         return applyRepository.findListAppliedToTheJobPost(jobPost.getId(), jobPost.getMember().getId());
+
+    }
+
+
+    /**
+     * 신청 거절하기
+     */
+    public SimpleApplyResponseDto refuseApply(Long applyId, Long memberId) {
+
+        // 해당 신청을 조회하여 견주인지 체크
+        Apply findApply = applyRepository.findByOwner(applyId, memberId).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_APPLY_PERMISSION));
+
+        // 수락상태 여부 수정하기
+        findApply.changeApplyStatus(ConstantPool.ApplyStatus.REFUSE);
+
+        // 만약 구인글 구인상태가 예약일 시 대기 상태로 수정하기
+        JobPost findJobPost = jobPostRepository.findJobPostByIdNotDeleted(findApply.getJobPost().getId()).orElseThrow(() -> new ApplicationException(ErrorCode.JOBPOST_NOT_FOUND));
+        if (findJobPost.getStatus() == Status.RESERVED) {
+            findJobPost.setStatus(Status.WAITING);
+        }
+
+        return new SimpleApplyResponseDto(findApply);
+
+    }
+
+    /**
+     * 신청 수락하기
+     */
+    public SimpleApplyResponseDto acceptApply(Long applyId, Long memberId) {
+
+        // 해당 신청을 조회하여 견주인지 체크
+        Apply findApply = applyRepository.findByOwner(applyId, memberId).orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_APPLY_PERMISSION));
+
+        // 해당 게시글에 수락된 신청이 이미 존재할 경우 예외 발생
+        if (applyRepository.findAcceptedApplyByJobPostId(findApply.getJobPost().getId()).isPresent()) {
+            throw new ApplicationException(ErrorCode.ACCEPT_APPLY_EXISTS);
+        }
+
+        // 해당 신청의 수락 상태를 예약으로 변경
+        findApply.changeApplyStatus(ConstantPool.ApplyStatus.ACCEPT);
+
+        // 구인글 구인상태가 예약으로 수정하기
+        JobPost findJobPost = jobPostRepository.findJobPostByIdNotDeleted(findApply.getJobPost().getId()).orElseThrow(() -> new ApplicationException(ErrorCode.JOBPOST_NOT_FOUND));
+        findJobPost.setStatus(Status.RESERVED);
+
+        return new SimpleApplyResponseDto(findApply);
+
 
     }
 }
