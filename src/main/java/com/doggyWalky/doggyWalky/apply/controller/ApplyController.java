@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/apply")
 public class ApplyController {
 
     private final ApplyService applyService;
@@ -22,7 +23,7 @@ public class ApplyController {
      * 신청 등록하기
      */
     // Todo: 테스트 미완료
-    @PostMapping("/apply")
+    @PostMapping()
     public ResponseEntity<SimpleApplyResponseDto> apply(@RequestBody NewApplyRequestDto requestDto, Principal principal) {
         Long workerId = Long.parseLong(principal.getName());
         SimpleApplyResponseDto applyResponseDto = applyService.registerApply(requestDto, workerId);
@@ -33,8 +34,8 @@ public class ApplyController {
      * 신청 목록 조회하기
      */
     // Todo: 페이징 처리하기, 테스트 미완료
-    @GetMapping("/apply/jobPost/{jobPostId}")
-    public ResponseEntity<List<ApplyResponseDto>> getApplyList(@PathVariable Long jobPostId, Principal principal) {
+    @GetMapping("/job-post/{job-post-id}")
+    public ResponseEntity<List<ApplyResponseDto>> getApplyList(@PathVariable("job-post-id") Long jobPostId, Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         List<ApplyResponseDto> applyList = applyService.getApplyList(jobPostId, memberId);
         return new ResponseEntity<>(applyList, HttpStatus.OK);
@@ -43,7 +44,7 @@ public class ApplyController {
     /**
      * 신청 수락하기
      */
-    @PostMapping("/apply/{apply-id}/accept")
+    @PostMapping("/{apply-id}/accept")
     public ResponseEntity<SimpleApplyResponseDto> acceptApply(@PathVariable("apply-id") Long applyId, Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         SimpleApplyResponseDto response = applyService.acceptApply(applyId, memberId);
@@ -54,7 +55,7 @@ public class ApplyController {
     /**
      * 신청 거절하기
      */
-    @PostMapping("/apply/{apply-id}/refuse")
+    @PostMapping("/{apply-id}/refuse")
     public ResponseEntity<SimpleApplyResponseDto> refuseApply(@PathVariable("apply-id") Long applyId, Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         SimpleApplyResponseDto response = applyService.refuseApply(applyId, memberId);

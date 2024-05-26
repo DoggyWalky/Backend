@@ -13,17 +13,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/files")
 public class FileController {
 
     private final FileService fileService;
 
-    @GetMapping("/files")
+    @GetMapping()
     public ResponseEntity getFileList(@RequestBody FileRequestDto dto) {
         List<FileResponseDto> response = fileService.findFilesByTableInfo(dto, true);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @PostMapping("/files")
+    @PostMapping()
     public ResponseEntity postFile(@RequestParam List<MultipartFile> files) {
         List<FileResponseDto> response = fileService.uploadFile(files);
         return new ResponseEntity(response, HttpStatus.OK);

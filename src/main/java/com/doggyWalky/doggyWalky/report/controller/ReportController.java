@@ -24,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class ReportController {
 
     private final ReportService reportService;
@@ -45,8 +46,8 @@ public class ReportController {
         return reportService.getReportList(condition, pageable);
     }
 
-    @GetMapping("/reports/{reportId}/chatList")
-    public ResponseEntity getChatListForReports(@PathVariable("reportId") Long reportId,
+    @GetMapping("/reports/{report-id}/chat-list")
+    public ResponseEntity getChatListForReports(@PathVariable("report-id") Long reportId,
                                                 @RequestBody ChatReportRequestDto dto) {
         List<ChatMessageResponse> chatLists = reportService.getChatListForReports(dto, reportId);
         return new ResponseEntity(chatLists, HttpStatus.OK);

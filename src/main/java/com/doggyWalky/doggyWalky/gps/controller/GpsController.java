@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class GpsController {
 
     private final GpsService gpsService;
@@ -36,7 +37,7 @@ public class GpsController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/gpsByBatch")
+    @PostMapping("/gps-by-batch")
     public ResponseEntity saveGpsByBatch(@RequestBody List<GpsRequestDto> gpsList) throws  Exception{
         String jsonData = objectMapper.writeValueAsString(gpsList);
         redisTemplate.opsForValue().set("gpsDataKey", jsonData);
@@ -49,8 +50,8 @@ public class GpsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/gps/jobPost/{jobPostId}")
-    public ResponseEntity getGpsList(@PathVariable Long jobPostId) {
+    @GetMapping("/gps/job-post/{job-post-id}")
+    public ResponseEntity getGpsList(@PathVariable("job-post-id") Long jobPostId) {
         List<GpsResponseDto> gpsList = gpsService.getGpsList(jobPostId);
         return new ResponseEntity(gpsList, HttpStatus.OK);
     }

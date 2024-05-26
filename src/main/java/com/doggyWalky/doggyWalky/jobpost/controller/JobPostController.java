@@ -64,8 +64,8 @@ public class JobPostController {
     /**
      * 산책 종료하기
      */
-    @PostMapping("/{jobPostId}/walkComplete")
-    public ResponseEntity<JobPostSimpleResponseDto> walkComplete(@PathVariable Long jobPostId, Principal principal) {
+    @PostMapping("/{job-post-id}/walk-complete")
+    public ResponseEntity<JobPostSimpleResponseDto> walkComplete(@PathVariable("job-post-id") Long jobPostId, Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         JobPostSimpleResponseDto dto = jobPostService.setWalkingComplete(memberId, jobPostId);
         return new ResponseEntity(dto,HttpStatus.OK);
