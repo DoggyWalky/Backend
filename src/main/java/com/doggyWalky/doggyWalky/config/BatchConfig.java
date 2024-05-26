@@ -12,6 +12,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -31,7 +32,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.util.List;
 
 @Configuration
-@EnableConfigurationProperties(BatchProperties.class)
+@EnableBatchProcessing
+//@EnableConfigurationProperties(BatchProperties.class)
 @RequiredArgsConstructor
 public class BatchConfig {
 
@@ -48,6 +50,8 @@ public class BatchConfig {
     private final GpsProcessor gpsProcessor;
 
     private final StepExecutionListener GpsStepListener;
+
+    private final JobExecutionListener GpsJobListener;
 
 
     @Bean

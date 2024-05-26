@@ -4,6 +4,7 @@ package com.doggyWalky.doggyWalky.oauth.service;
 import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
+import com.doggyWalky.doggyWalky.member.dto.response.MemberSimpleResponseDto;
 import com.doggyWalky.doggyWalky.member.entity.Member;
 import com.doggyWalky.doggyWalky.member.entity.MemberProfileInfo;
 import com.doggyWalky.doggyWalky.member.entity.MemberSecretInfo;
@@ -38,6 +39,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 import static com.doggyWalky.doggyWalky.constant.ConstantPool.*;
 import static com.doggyWalky.doggyWalky.exception.ErrorCode.INVALID_SOCIAL_LOGIN_TYPE;
@@ -46,7 +48,6 @@ import static com.doggyWalky.doggyWalky.exception.ErrorCode.INVALID_SOCIAL_LOGIN
 @RequiredArgsConstructor
 public class OauthService {
     private final NaverOauth naverOauth;
-    private final HttpServletResponse response;
 
     private final MemberRepository memberRepository;
 
@@ -70,22 +71,8 @@ public class OauthService {
 
 
 
-
-    public void request(SocialLoginType socialLoginType) throws IOException {
-        String redirectURL = switch (socialLoginType) {
-            case NAVER -> {
-                yield naverOauth.getOauthRedirectURL();
-            }
-            default -> {
-                throw new ApplicationException(INVALID_SOCIAL_LOGIN_TYPE);
-            }
-        };
-
-        response.sendRedirect(redirectURL);
-    }
-
     @Transactional
-    public void oauthLogin(ConstantPool.SocialLoginType socialLoginType, String code ,HttpServletRequest request) throws IOException {
+    public MemberSimpleResponseDto oauthLogin(ConstantPool.SocialLoginType socialLoginType, String code , HttpServletRequest request, HttpServletResponse response) throws IOException {
         switch (socialLoginType) {
             case NAVER -> {
                 // 네이버로 일회성 코드를 보내 액세스 토큰이 담긴 응답객체를 받아온다
@@ -99,11 +86,13 @@ public class OauthService {
 
                 // DB에 회원 이메일이 등록 되어있는지 확인 후 있으면 회원가입 처리 및 토큰 발급, 없으면 그냥 토큰 발급
                 // 회원가입 처리
-                if (memberRepository.findByEmail(symmetricCrypto.encrypt(naverUser.getEmail())).isEmpty()) {
+                Member findMember;
+                Optional<Member> memberOptional = memberRepository.findByEmail(symmetricCrypto.encrypt(naverUser.getEmail()));
+                if (memberOptional.isEmpty()) {
                     System.out.println("신규 회원");
                     Role role = roleRepository.findByRoleName(Role.RoleName.USER).orElseThrow(() -> new ApplicationException(ErrorCode.AUTHORITY_NOT_FOUND));
                     Member member = new Member(symmetricCrypto.encrypt(naverUser.getEmail()),naverUser.getName(),role);
-                    Member findMember = memberRepository.save(member);
+                    findMember = memberRepository.save(member);
 
                     MemberProfileInfo memberProfile = new MemberProfileInfo(member);
                     memberProfileRepository.save(memberProfile);
@@ -117,6 +106,8 @@ public class OauthService {
                     System.out.println("회원 이메일(실제) :" +naverUser.getEmail());
                     System.out.println("회원 이메일(DB 암호화) :" +findMember.getEmail());
                     System.out.println("회원 이메일(DB 복호화) :" +symmetricCrypto.decrypt(findMember.getEmail()));
+                } else {
+                    findMember = memberOptional.get();
                 }
 
                 System.out.println("해당 회원 저장 여부 :"+memberRepository.findByEmail(symmetricCrypto.encrypt(naverUser.getEmail())).get().getEmail());
@@ -136,17 +127,8 @@ public class OauthService {
                 String jwt = tokenProvider.createToken(authentication);
                 String refresh = refreshTokenProvider.createToken(authentication, ipAddress);
 
-                Cookie jwtCookie = new Cookie(AUTHORIZATION_HEADER,  jwt);
-                jwtCookie.setHttpOnly(true);
-                jwtCookie.setSecure(true);
-                jwtCookie.setPath("/");
-                response.addCookie(jwtCookie);
-
-                Cookie refreshCookie = new Cookie(REFRESH_HEADER,  refresh);
-                refreshCookie.setHttpOnly(true);
-                refreshCookie.setSecure(true);
-                refreshCookie.setPath("/");
-                response.addCookie(refreshCookie);
+                response.addHeader(AUTHORIZATION_HEADER, jwt);
+                response.addHeader(REFRESH_HEADER, refresh);
 
                 // REDIS에 Refresh Token 저장
                 try {
@@ -156,6 +138,8 @@ public class OauthService {
                 } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException e) {
                     throw new ApplicationException(ErrorCode.CRYPT_ERROR);
                 }
+
+                return new MemberSimpleResponseDto(findMember.getId());
 
 
 

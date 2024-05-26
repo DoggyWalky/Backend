@@ -24,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class MemberController {
 
     private final TokenStorageService redisService;
@@ -35,7 +36,7 @@ public class MemberController {
     /**
      * 로그아웃 시 토큰 제거
      */
-    @GetMapping("/removeToken")
+    @GetMapping("/remove-token")
     public ResponseEntity removeToken(Principal principal, HttpServletRequest request) {
         try {
             // Refresh 토큰을 Redis에서 제거하는 작업
@@ -44,13 +45,13 @@ public class MemberController {
             throw new ApplicationException(ErrorCode.CRYPT_ERROR);
         }
 
-        return new ResponseEntity(principal.getName() + " 삭제완료", HttpStatus.OK);
+        return new ResponseEntity(new MemberSimpleResponseDto(Long.parseLong(principal.getName())), HttpStatus.OK);
     }
 
     /**
      * 개인 회원정보 조회
      */
-    @GetMapping("/members")
+    @GetMapping("/members/profile")
     public ResponseEntity getMember(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         List<MemberProfileResponseDto> memberProfiles = memberService.getMemberProfiles(memberId);
@@ -93,13 +94,8 @@ public class MemberController {
         return new ResponseEntity(new MemberSimpleResponseDto(memberId), HttpStatus.OK);
     }
 
-    /**
-     * 관리자 권한 검사 테스트
-     */
-    @GetMapping("/admin/test")
-    public ResponseEntity test(Principal principal) {
-        Long memberId = Long.parseLong(principal.getName());
-        return new ResponseEntity(memberId, HttpStatus.OK);
-    }
+    // Todo: 다른 사람 프로필 조회하는 API 작성하기
+
+
 }
 
