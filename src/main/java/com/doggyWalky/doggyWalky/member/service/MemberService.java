@@ -53,6 +53,10 @@ public class MemberService {
     @Transactional(readOnly = true)
     public List<MemberProfileResponseDto> getMemberProfiles(Long memberId) {
         List<MemberProfileResponseDto> memberProfiles = memberProfileInfoRepository.findMemberProfiles(memberId, false);
+
+        if (memberProfiles==null || memberProfiles.size()==0) {
+            throw new ApplicationException(ErrorCode.USER_NOT_FOUND);
+        }
         return memberProfiles;
     }
 
