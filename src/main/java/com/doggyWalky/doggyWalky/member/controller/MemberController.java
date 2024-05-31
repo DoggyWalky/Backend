@@ -94,8 +94,15 @@ public class MemberController {
         return new ResponseEntity(new MemberSimpleResponseDto(memberId), HttpStatus.OK);
     }
 
+    /**
+     * 다른 회원 프로필 조회하기
+     */
     // Todo: 다른 사람 프로필 조회하는 API 작성하기
-
+    @GetMapping("/members/{user-id}/profile")
+    public ResponseEntity getMemberProfile(@PathVariable("user-id") Long memberId) {
+        List<MemberProfileResponseDto> memberProfiles = memberService.getMemberProfiles(memberId);
+        return new ResponseEntity(memberProfiles, HttpStatus.OK);
+    }
 
 }
 

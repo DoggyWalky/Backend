@@ -2,9 +2,15 @@ package com.doggyWalky.doggyWalky.apply.controller;
 
 import com.doggyWalky.doggyWalky.apply.dto.request.NewApplyRequestDto;
 import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
+import com.doggyWalky.doggyWalky.apply.dto.response.MyApplyResponseDto;
 import com.doggyWalky.doggyWalky.apply.dto.response.SimpleApplyResponseDto;
 import com.doggyWalky.doggyWalky.apply.service.ApplyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +70,18 @@ public class ApplyController {
 
 
     // Todo: 내가 신청한 목록 조회 API 작성
+    @GetMapping("/my-apply")
+    public ResponseEntity getMyApplyList(Principal principal, @PageableDefault(size = 10, direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
+        Long memberId = Long.parseLong(principal.getName());
 
+        // 기본 Sort 설정
+        Sort sort = pageable.getSort().and(Sort.by("createdDate"));
+
+        // Pageable 객체 생성
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        Page<MyApplyResponseDto> myApplyList = applyService.getMyApplyList(memberId, sortedPageable);
+        return new ResponseEntity(myApplyList, HttpStatus.OK);
+    }
 
 }

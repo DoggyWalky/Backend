@@ -2,6 +2,7 @@ package com.doggyWalky.doggyWalky.apply.service;
 
 import com.doggyWalky.doggyWalky.apply.dto.request.NewApplyRequestDto;
 import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
+import com.doggyWalky.doggyWalky.apply.dto.response.MyApplyResponseDto;
 import com.doggyWalky.doggyWalky.apply.dto.response.SimpleApplyResponseDto;
 import com.doggyWalky.doggyWalky.apply.entity.Apply;
 import com.doggyWalky.doggyWalky.apply.repository.ApplyRepository;
@@ -15,6 +16,9 @@ import com.doggyWalky.doggyWalky.member.entity.Member;
 import com.doggyWalky.doggyWalky.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -120,5 +124,12 @@ public class ApplyService {
         return new SimpleApplyResponseDto(findApply);
 
 
+    }
+
+    public Page<MyApplyResponseDto> getMyApplyList(Long memberId, Pageable pageable) {
+        memberRepository.findByIdNotDeleted(memberId).orElseThrow(() -> new ApplicationException(ErrorCode.USER_NOT_FOUND));
+
+        Page<MyApplyResponseDto> myApplyList = applyRepository.getMyApplyList(memberId, pageable);
+        return myApplyList;
     }
 }
