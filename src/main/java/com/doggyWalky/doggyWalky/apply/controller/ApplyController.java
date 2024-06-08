@@ -71,11 +71,11 @@ public class ApplyController {
 
     // Todo: 내가 신청한 목록 조회 API 작성
     @GetMapping("/my-apply")
-    public ResponseEntity getMyApplyList(Principal principal, @PageableDefault(size = 10, direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity getMyApplyList(Principal principal, @PageableDefault(size = 10,sort="createdDate", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
         Long memberId = Long.parseLong(principal.getName());
 
         // 기본 Sort 설정
-        Sort sort = pageable.getSort().and(Sort.by("createdDate"));
+        Sort sort = pageable.getSort();
 
         // Pageable 객체 생성
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);

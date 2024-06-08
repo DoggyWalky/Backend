@@ -1,5 +1,6 @@
 package com.doggyWalky.doggyWalky.config;
 
+import com.doggyWalky.doggyWalky.batch.CustomJobIncrementer;
 import com.doggyWalky.doggyWalky.batch.processor.GpsProcessor;
 import com.doggyWalky.doggyWalky.batch.writer.GpsWriter;
 import com.doggyWalky.doggyWalky.gps.dto.request.GpsRequestDto;
@@ -15,6 +16,7 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
@@ -57,6 +59,8 @@ public class BatchConfig {
     @Bean
     public Job myJob(Step step) {
         return new JobBuilder("gpsJob", this.jobRepository)
+                .incrementer(new CustomJobIncrementer())
+                .listener(GpsJobListener)
                 .start(step)
                 .build();
     }
@@ -64,11 +68,10 @@ public class BatchConfig {
     @Bean
     public Step step() throws JsonProcessingException {
         return new StepBuilder("gpsStep", this.jobRepository)
-                .<GpsRequestDto, Gps>chunk(10, platformTransactionManager)
+                .<GpsRequestDto, Gps>chunk(100, platformTransactionManager)
                 .reader(itemReader(null))
                 .processor(gpsProcessor)
                 .writer(gpsWriter)
-                .listener(GpsStepListener)
                 .taskExecutor(taskExecutor())
                 .build();
     }
@@ -84,7 +87,13 @@ public class BatchConfig {
     @StepScope
     public ItemReader<GpsRequestDto> itemReader(@Value("#{jobParameters[dataIdentifier]}") String dataIdentifier) throws JsonProcessingException {
         // dataIdentifier를 사용하여 실제 데이터 로딩
+        if (dataIdentifier == null) {
+            throw new IllegalArgumentException("Job parameter 'dataIdentifier' is required");
+        }
         List<GpsRequestDto> inputData = loadDataByIdentifier(dataIdentifier);
+        if (inputData == null || inputData.isEmpty()) {
+            throw new IllegalArgumentException("No data found for identifier: " + dataIdentifier);
+        }
         return new ListItemReader<>(inputData);
     }
 

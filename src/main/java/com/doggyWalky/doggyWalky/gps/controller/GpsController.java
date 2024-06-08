@@ -10,7 +10,10 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +40,13 @@ public class GpsController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/gps-by-batch")
-    public ResponseEntity saveGpsByBatch(@RequestBody List<GpsRequestDto> gpsList) throws  Exception{
+    @PostMapping("/gps-by-batch/{post-id}")
+    public ResponseEntity saveGpsByBatch(@RequestBody List<GpsRequestDto> gpsList,
+                                         @PathVariable("post-id") Long postId) throws  Exception{
         String jsonData = objectMapper.writeValueAsString(gpsList);
-        redisTemplate.opsForValue().set("gpsDataKey", jsonData);
+        redisTemplate.opsForValue().set("gpsDataKey:"+postId, jsonData);
         JobParameters jobParameters = new JobParametersBuilder()
-                .addString("dataIdentifier", "gpsDataKey")
+                .addString("dataIdentifier", "gpsDataKey:"+postId)
                 .addLong("time", System.currentTimeMillis())
                 .toJobParameters();
 
@@ -51,8 +55,8 @@ public class GpsController {
     }
 
     @GetMapping("/gps/job-post/{job-post-id}")
-    public ResponseEntity getGpsList(@PathVariable("job-post-id") Long jobPostId) {
-        List<GpsResponseDto> gpsList = gpsService.getGpsList(jobPostId);
+    public ResponseEntity getGpsList(@PathVariable("job-post-id") Long jobPostId,@PageableDefault(size = 100,sort="coordinateTime", direction = org.springframework.data.domain.Sort.Direction.ASC) Pageable pageable) {
+        Page<GpsResponseDto> gpsList = gpsService.getGpsList(jobPostId, pageable);
         return new ResponseEntity(gpsList, HttpStatus.OK);
     }
 }

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Getter
+@Table(indexes = @Index(name = "idx_jobpost_id_coordinate_time", columnList = "jobPost_id, coordinate_time"))
 public class Gps {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,14 +28,14 @@ public class Gps {
     private Long jobPostId;
 
     @Column(name = "coordinate_time")
-    private LocalDateTime coordinate_time;
+    private LocalDateTime coordinateTime;
 
 
-    public Gps(GpsRequestDto dto, LocalDateTime coordinate_time) {
+    public Gps(GpsRequestDto dto, LocalDateTime coordinateTime) {
         this.latitude = dto.getLatitude();
         this.longitude = dto.getLongitude();
         this.jobPostId = dto.getJobPostId();
-        this.coordinate_time = coordinate_time;
+        this.coordinateTime = coordinateTime;
     }
 
 }
