@@ -52,7 +52,7 @@ jobs:
         if: contains(github.ref, 'main')
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile --build-arg JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }} -t ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
+          docker build -f Dockerfile --build-arg JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }} -t ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
 
       ## deploy to production
