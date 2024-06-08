@@ -1,6 +1,8 @@
 ## API 호출 시 SQL 문 출력
 spring:
   jpa:
+    hibernate:
+      ddl-auto: none
     properties:
       hibernate:
         #        show_sql: true 시스템아웃을 통해 찍음
@@ -19,7 +21,12 @@ spring:
     password: ENC(iuvYDPplQkEgB7ckTufyCRrmSDHBeOma)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-## 파일 크기 지정
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:batch-schema.sql
+
+  ## 파일 크기 지정
   servlet:
     multipart:
       max-file-size: 10MB

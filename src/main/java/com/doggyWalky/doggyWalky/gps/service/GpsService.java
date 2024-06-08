@@ -6,6 +6,8 @@ import com.doggyWalky.doggyWalky.gps.entity.Gps;
 import com.doggyWalky.doggyWalky.gps.repository.GpsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +39,10 @@ public class GpsService {
     }
 
     /**
-     *
+     * jobPostId 조건 + coordinateTime에 대해 ASC 정렬 조건 페이지네이션 조회
      */
-    public List<GpsResponseDto> getGpsList(Long jobPostId) {
-        return gpsRepository.findGpsListByJobPostId(jobPostId);
+    public Page<GpsResponseDto> getGpsList(Long jobPostId, Pageable pageable) {
+        return gpsRepository.findGpsListByJobPostId(jobPostId,pageable);
     }
 
 }
