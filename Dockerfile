@@ -1,5 +1,5 @@
 # OpenJDK 17 버전의 환경을 구성
-FROM adoptopenjdk/openjdk17:latest
+FROM eclipse-temurin:17
 
 # 빌드 시 환경 변수를 설정하기 위해 ARG 사용
 ARG JAR_FILE=build/libs/*.jar
