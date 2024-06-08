@@ -37,7 +37,14 @@ jobs:
 
       # gradle build
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        env:
+          JASYPT_PASSWORD: ${{ secrets.JASYPT_PASSWORD }}
+          DISABLE_EC2_METADATA: 'true'
+        run: ./gradlew build
+
+      # asciidoctor 실행
+      - name: Generate REST Docs
+        run: ./gradlew asciidoctor
 
       # docker build & push to production
       - name: Docker build & push to prod
