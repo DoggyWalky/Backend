@@ -14,4 +14,4 @@ ENV JASYPT_PASSWORD_ENV=${JASYPT_PASSWORD}
 ENV DISABLE_EC2_METADATA_ENV=${DISABLE_EC2_METADATA}
 
 # 환경 변수를 사용하여 애플리케이션 실행
-ENTRYPOINT ["sh", "-c", "java -jar -Djasypt.encryptor.password=${JASYPT_PASSWORD_ENV} -Dcom.amazonaws.sdk.disableEc2Metadata=${DISABLE_EC2_METADATA_ENV} /app.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar -Djasypt.encryptor.password=${JASYPT_PASSWORD_ENV} -Dcom.amazonaws.sdk.disableEc2Metadata=true /app.jar"]
