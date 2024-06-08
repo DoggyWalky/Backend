@@ -12,6 +12,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureRestDocs
 @Transactional
+@DirtiesContext
 class MemberControllerTest extends RestDocsTestSupport {
 
 
@@ -45,7 +47,7 @@ class MemberControllerTest extends RestDocsTestSupport {
         Mockito.when(redisService.getRefreshToken(Mockito.anyString())).thenReturn(null);
 
         // when
-        mockMvc.perform(get("/removeToken")
+        mockMvc.perform(get("/api/remove-token")
                         .with(SecurityMockMvcRequestPostProcessors.user(userDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.memberId").value(24L))

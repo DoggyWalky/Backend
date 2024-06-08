@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.jpa.properties.hibernate.cache.use_second_level_cache=false",
         "spring.jpa.properties.hibernate.cache.use_query_cache=false"
 })
+@DirtiesContext
 class GpsRepositoryTest {
 
     @Autowired
