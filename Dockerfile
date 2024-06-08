@@ -9,9 +9,7 @@ COPY ${JAR_FILE} app.jar
 
 # 런타임에 사용할 환경 변수를 설정하기 위해 ENV 사용
 ARG JASYPT_PASSWORD
-ARG DISABLE_EC2_METADATA
 ENV JASYPT_PASSWORD_ENV=${JASYPT_PASSWORD}
-ENV DISABLE_EC2_METADATA_ENV=${DISABLE_EC2_METADATA}
 
 # 환경 변수를 사용하여 애플리케이션 실행
 ENTRYPOINT ["sh", "-c", "java -jar -Djasypt.encryptor.password=${JASYPT_PASSWORD_ENV} -Dcom.amazonaws.sdk.disableEc2Metadata=true /app.jar"]
