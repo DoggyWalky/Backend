@@ -36,14 +36,15 @@ jobs:
 
 
       # gradle build
-      - name: Build with Gradle
+      - name: Build Test with Gradle
         env:
-          JASYPT_PASSWORD: ${{ secrets.JASYPT_PASSWORD }}
-          DISABLE_EC2_METADATA: 'true'
+          JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
         run: ./gradlew build
 
       # asciidoctor 실행
       - name: Generate REST Docs
+        env:
+          JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
         run: ./gradlew asciidoctor
 
       # docker build & push to production
@@ -67,6 +68,6 @@ jobs:
           script: |
             sudo docker ps
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
-            sudo docker run -d -p 8081:8081 --name doggywalky-main -e JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }} -e DISABLE_EC2_METADATA=${{ secrets.DISABLE_EC2_METADATA }} ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
+            sudo docker run -d -p 8080:8080 --name doggywalky-main -e JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }} -e DISABLE_EC2_METADATA=${{ secrets.DISABLE_EC2_METADATA }} ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
             sudo docker image prune -f
 
