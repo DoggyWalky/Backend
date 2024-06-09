@@ -74,10 +74,14 @@ tasks.named('asciidoctor') {
 	configurations 'asciidoctorExt'
 	inputs.dir snippetsDir
 	inputs.dir file('src/docs/asciidoc')
-	finalizedBy copyDocument
 	doFirst {
 		delete file('build/docs/asciidoc')
 	}
+	doLast {
+		println "Generated documentation files:"
+		fileTree('build/docs/asciidoc').visit { println it }
+	}
+	finalizedBy copyDocument
 }
 // spring-rest-docs 추가
 task copyDocument(type: Copy) {
