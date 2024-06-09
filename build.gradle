@@ -89,6 +89,7 @@ task copyDocument(type: Copy) {
 	from file('build/docs/asciidoc')
 	into file('src/main/resources/static/docs')
 	doFirst {
+		println "Current working directory: ${new File('.').absolutePath}"
 		println "Copying documentation files from 'build/docs/asciidoc' to 'src/main/resources/static/docs'"
 		file('src/main/resources/static/docs').mkdirs()
 	}
