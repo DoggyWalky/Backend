@@ -39,7 +39,7 @@ jobs:
       - name: Build Test with Gradle
         env:
           JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
-        run: ./gradlew build
+        run: ./gradlew clean build
 
       # asciidoctor 실행
       - name: Generate REST Docs
