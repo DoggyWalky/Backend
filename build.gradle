@@ -84,6 +84,9 @@ task copyDocument(type: Copy) {
 	dependsOn asciidoctor
 	from file('build/docs/asciidoc')
 	into file('src/main/resources/static/docs')
+	doFirst {
+		file('src/main/resources/static/docs').mkdirs()
+	}
 }
 
 // spring-rest-docs 추가
