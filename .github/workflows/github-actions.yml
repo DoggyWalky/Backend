@@ -34,6 +34,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Print working directory
+        run: pwd
+
+      - name: List files in the repository
+        run: ls -la
+
 
       # gradle build
       - name: Build Test with Gradle
