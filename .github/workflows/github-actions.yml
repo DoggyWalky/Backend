@@ -46,6 +46,10 @@ jobs:
 #        env:
 #          JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
 #        run: ./gradlew asciidoctor
+
+      - name: Check build/docs/asciidoc directory
+        run: ls -la build/docs/asciidoc
+
         # 경로검사
       - name: Check copied files
         run: ls -la src/main/resources/static/docs
