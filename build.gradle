@@ -87,6 +87,10 @@ task copyDocument(type: Copy) {
 	doFirst {
 		file('src/main/resources/static/docs').mkdirs()
 	}
+	doLast {
+		println "Copied documentation files:"
+		fileTree('src/main/resources/static/docs').visit { println it }
+	}
 }
 
 // spring-rest-docs 추가

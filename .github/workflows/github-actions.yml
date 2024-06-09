@@ -47,6 +47,13 @@ jobs:
           JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
         run: ./gradlew asciidoctor
 
+      # docs 로그 출력
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: docs
+          path: src/main/resources/static/docs/
+
       # docker build & push to production
       - name: Docker build & push to prod
         if: contains(github.ref, 'main')
