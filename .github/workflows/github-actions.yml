@@ -59,7 +59,10 @@ jobs:
 
         # 경로검사
       - name: Check copied files
-        run: ls -la /home/runner/work/Backend/Backend/src/main/resources/static/docs
+        run: |
+          cd /home/runner/work/Backend/Backend
+          ls -la src/main/resources/static/docs
+        
 
       # docs 로그 출력
       - name: Upload build artifacts
