@@ -13,6 +13,11 @@ spring:
 ## Mysql 상세 지정
     database: mysql
 
+  mvc:
+    static-path-pattern: /**
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/public/,classpath:/,classpath:/resources/,classpath:/META-INF/resources/
 
   ## Mysql 기본 설정
   datasource:
