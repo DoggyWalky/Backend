@@ -41,11 +41,11 @@ jobs:
           JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
         run: ./gradlew clean build
 
-      # asciidoctor 실행
-      - name: Generate REST Docs
-        env:
-          JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
-        run: ./gradlew asciidoctor
+#      # asciidoctor 실행
+#      - name: Generate REST Docs
+#        env:
+#          JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
+#        run: ./gradlew asciidoctor
 
       # docs 로그 출력
       - name: Upload build artifacts
@@ -62,7 +62,7 @@ jobs:
           docker build -f Dockerfile --build-arg JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }} -t ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
 
-      ## deploy to production
+      # deploy to production
       - name: Deploy to prod
         uses: appleboy/ssh-action@master
         id: deploy-prod
