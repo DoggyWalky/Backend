@@ -100,11 +100,13 @@ task copyDocument(type: Copy) {
 }
 
 // spring-rest-docs 추가
+task cleanRestDocs(type: Delete) {
+	delete file('src/main/resources/static/docs')
+}
+
 bootJar {
-	dependsOn 'asciidoctor'
-	doFirst {
-		delete file('src/main/resources/static/docs')
-	}
+	dependsOn cleanRestDocs
+	dependsOn copyDocument
 	from("${asciidoctor.outputDir}") {
 		into 'static/docs'
 	}
