@@ -15,7 +15,6 @@ include::{snippets}/member-controller-test/removetoken_200/http-request.adoc[]
 
 ==== 요청 필드
 
-include::{snippets}/member-controller-test/removetoken_200/request-fields.adoc[]
 
 ==== 응답
 
