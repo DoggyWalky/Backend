@@ -40,6 +40,7 @@ jobs:
         env:
           JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
         run: ./gradlew clean build
+        working-directory: Backend  # 작업 디렉토리를 명시적으로 설정
 
 #      # asciidoctor 실행
 #      - name: Generate REST Docs
@@ -49,10 +50,12 @@ jobs:
 
       - name: Check build/docs/asciidoc directory
         run: ls -la build/docs/asciidoc
+        working-directory: Backend  # 작업 디렉토리를 명시적으로 설정
 
         # 경로검사
       - name: Check copied files
         run: ls -la src/main/resources/static/docs
+        working-directory: Backend  # 작업 디렉토리를 명시적으로 설정
 
       # docs 로그 출력
       - name: Upload build artifacts
@@ -60,6 +63,7 @@ jobs:
         with:
           name: docs
           path: src/main/resources/static/docs/
+        working-directory: Backend  # 작업 디렉토리를 명시적으로 설정
 
       # docker build & push to production
       - name: Docker build & push to prod
