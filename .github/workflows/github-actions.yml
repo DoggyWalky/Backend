@@ -45,9 +45,7 @@ jobs:
       - name: Build Test with Gradle
         env:
           JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
-        run: |
-          cd Backend
-          ./gradlew clean build
+        run: ./gradlew clean build
 
 
 #      # asciidoctor 실행
@@ -57,22 +55,18 @@ jobs:
 #        run: ./gradlew asciidoctor
 
       - name: Check build/docs/asciidoc directory
-        run: |
-          cd Backend
-          ls -la build/docs/asciidoc
+        run: ls -la build/docs/asciidoc
 
         # 경로검사
       - name: Check copied files
-        run: |
-          cd Backend
-          ls -la src/main/resources/static/docs
+        run: ls -la /home/runner/work/Backend/Backend/src/main/resources/static/docs/
 
       # docs 로그 출력
       - name: Upload build artifacts
         uses: actions/upload-artifact@v2
         with:
           name: docs
-          path: Backend/src/main/resources/static/docs/
+          path: /home/runner/work/Backend/Backend/src/main/resources/static/docs/
 
       # docker build & push to production
       - name: Docker build & push to prod
