@@ -22,7 +22,7 @@ public class DogController {
     private final DogService dogService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterDogResponse> registerDog(@AuthenticationPrincipal Principal principal, @RequestBody RegisterDogRequest registerDogRequest
+    public ResponseEntity<RegisterDogResponse> registerDog(Principal principal, @RequestBody RegisterDogRequest registerDogRequest
 
     ) {
         return ResponseEntity.ok(dogService.registerDog(Long.valueOf(principal.getName()), registerDogRequest));

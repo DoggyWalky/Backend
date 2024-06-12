@@ -40,6 +40,7 @@ public class JobPostRegisterRequest {
                 .startPoint(this.startPoint)
                 .endPoint(this.endPoint)
                 .dogId(this.dogId)
+                .deletedYn(false)
                 .build();
     }
 

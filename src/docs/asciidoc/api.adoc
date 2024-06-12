@@ -1,0 +1,627 @@
+= DoggyWalky API Documentation
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+
+== OAUTH 로그인 관련 API
+
+=== 소셜 로그인 요청에 대한 응답 처리(로그인, 회원가입 처리)
+
+==== 요청
+
+include::{snippets}/oauth-controller-test/sociallogin_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/oauth-controller-test/sociallogin_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/oauth-controller-test/sociallogin_200/response-fields.adoc[]
+
+'''
+
+== 회원 관련 API
+
+=== 로그아웃
+
+==== 요청
+
+include::{snippets}/member-controller-test/removetoken_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/member-controller-test/removetoken_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/member-controller-test/removetoken_200/response-fields.adoc[]
+
+'''
+
+=== 회원 프로필 조회
+
+==== 요청
+
+include::{snippets}/member-controller-test/getmemberprofile_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/member-controller-test/getmemberprofile_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/member-controller-test/getmemberprofile_200/response-fields.adoc[]
+
+'''
+
+=== 타회원 프로필 조회
+
+==== 요청
+
+include::{snippets}/member-controller-test/getothermemberprofile_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/member-controller-test/getothermemberprofile_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/member-controller-test/getothermemberprofile_200/response-fields.adoc[]
+
+'''
+
+=== 회원 프로필 수정
+
+==== 요청
+
+include::{snippets}/member-controller-test/modifymemberprofile_200/http-request.adoc[]
+
+==== 요청 필드
+include::{snippets}/member-controller-test/modifymemberprofile_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/member-controller-test/modifymemberprofile_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/member-controller-test/modifymemberprofile_200/response-fields.adoc[]
+
+'''
+
+=== 회원 탈퇴
+
+==== 요청
+
+include::{snippets}/member-controller-test/updatememberdelete_200/http-request.adoc[]
+
+==== 요청 필드
+
+==== 응답
+
+include::{snippets}/member-controller-test/updatememberdelete_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/member-controller-test/updatememberdelete_200/response-fields.adoc[]
+
+'''
+
+== 산책 신청 관련 API
+
+'''
+
+=== 산책 신청 등록하기
+
+==== 요청
+
+include::{snippets}/apply-controller-test/apply_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/apply-controller-test/apply_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/apply-controller-test/apply_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/apply-controller-test/apply_200/response-fields.adoc[]
+
+'''
+
+=== 산책 신청 목록 조회
+
+==== 요청
+
+include::{snippets}/apply-controller-test/getapplylist_200/http-request.adoc[]
+
+==== 요청 필드
+
+==== 응답
+
+include::{snippets}/apply-controller-test/getapplylist_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/apply-controller-test/getapplylist_200/response-fields.adoc[]
+
+'''
+
+=== 내가 산책 신청한 목록 조회
+
+==== 요청
+
+include::{snippets}/apply-controller-test/getmyapplylist_200/http-request.adoc[]
+
+==== 요청 필드
+
+==== 응답
+
+include::{snippets}/apply-controller-test/getmyapplylist_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/apply-controller-test/getmyapplylist_200/response-fields.adoc[]
+
+'''
+
+=== 산책 신청 수락하기
+
+==== 요청
+
+include::{snippets}/apply-controller-test/acceptapply_200/http-request.adoc[]
+
+==== 요청 필드
+
+==== 응답
+
+include::{snippets}/apply-controller-test/acceptapply_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/apply-controller-test/acceptapply_200/response-fields.adoc[]
+
+'''
+
+=== 산책 신청 거절하기
+
+==== 요청
+
+include::{snippets}/apply-controller-test/refuseapply_200/http-request.adoc[]
+
+==== 요청 필드
+
+==== 응답
+
+include::{snippets}/apply-controller-test/refuseapply_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/apply-controller-test/refuseapply_200/response-fields.adoc[]
+
+'''
+
+== 파일 관련 API
+
+
+'''
+
+=== 파일 목록 조회
+
+==== 요청
+
+include::{snippets}/file-controller-test/getfilelist_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/file-controller-test/getfilelist_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/file-controller-test/getfilelist_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/file-controller-test/getfilelist_200/response-fields.adoc[]
+
+'''
+
+=== 파일 등록
+
+==== 요청
+
+include::{snippets}/file-controller-test/postfile_200/http-request.adoc[]
+
+==== 요청 파츠
+
+include::{snippets}/file-controller-test/postfile_200/request-parts.adoc[]
+
+
+==== 응답
+
+include::{snippets}/file-controller-test/postfile_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/file-controller-test/postfile_200/response-fields.adoc[]
+
+'''
+
+== 채팅 관련 API
+
+
+'''
+
+=== 채팅방 생성하기
+
+==== 요청
+
+include::{snippets}/chat-controller-test/contact_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/chat-controller-test/contact_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/chat-controller-test/contact_200/http-response.adoc[]
+
+
+'''
+
+=== 채팅방 숨김 설정하기
+
+==== 요청
+
+include::{snippets}/chat-controller-test/unvisible_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/chat-controller-test/unvisible_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/chat-controller-test/unvisible_200/http-response.adoc[]
+
+'''
+
+=== 채팅방 나가기 설정
+
+==== 요청
+
+include::{snippets}/chat-controller-test/quit_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/chat-controller-test/quit_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/chat-controller-test/quit_200/http-response.adoc[]
+
+'''
+
+== 신고 관련 API
+
+
+'''
+
+=== 신고 등록하기
+
+==== 요청
+
+include::{snippets}/report-controller-test/report_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/report-controller-test/report_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/report_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/report-controller-test/report_200/response-fields.adoc[]
+
+'''
+
+=== 신고 목록 조회
+
+==== 요청
+
+include::{snippets}/report-controller-test/getreportlist_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/report-controller-test/getreportlist_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/getreportlist_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/report-controller-test/getreportlist_200/response-fields.adoc[]
+
+'''
+
+=== 채팅 욕설 신고에 대한 채팅 리스트 조회
+
+==== 요청
+
+include::{snippets}/report-controller-test/getchatlistforreport_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/report-controller-test/getchatlistforreport_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/getchatlistforreport_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/report-controller-test/getchatlistforreport_200/response-fields.adoc[]
+
+'''
+
+== 강아지 관련 API
+
+
+'''
+
+=== 강아지 등록하기
+
+==== 요청
+
+include::{snippets}/dog-controller-test/registerdog_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/dog-controller-test/registerdog_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/dog-controller-test/registerdog_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/dog-controller-test/registerdog_200/response-fields.adoc[]
+
+'''
+
+=== 강아지 PK를 이용한 강아지 조회하기
+
+==== 요청
+
+include::{snippets}/dog-controller-test/finddogbyid_200/http-request.adoc[]
+
+==== 요청 필드
+
+==== 응답
+
+include::{snippets}/dog-controller-test/finddogbyid_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/dog-controller-test/finddogbyid_200/response-fields.adoc[]
+
+'''
+
+=== 사용자 소유 강아지 목록 조회하기
+
+==== 요청
+
+include::{snippets}/dog-controller-test/finddoglistbyownerid_200/http-request.adoc[]
+
+==== 요청 필드
+
+==== 응답
+
+include::{snippets}/dog-controller-test/finddoglistbyownerid_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/dog-controller-test/finddoglistbyownerid_200/response-fields.adoc[]
+
+'''
+
+=== 강아지 정보 수정하기
+
+==== 요청
+
+include::{snippets}/dog-controller-test/updatedog_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/dog-controller-test/updatedog_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/dog-controller-test/updatedog_200/http-response.adoc[]
+
+==== 응답 필드
+
+'''
+
+=== 강아지 삭제하기
+
+==== 요청
+
+include::{snippets}/dog-controller-test/deletedog_200/http-request.adoc[]
+
+==== 요청 필드
+
+==== 응답
+
+include::{snippets}/dog-controller-test/deletedog_200/http-response.adoc[]
+
+==== 응답 필드
+
+'''
+
+== GPS 관련 API
+
+
+'''
+
+=== GPS 등록하기
+
+==== 요청
+
+include::{snippets}/gps-controller-test/savegps_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/gps-controller-test/savegps_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/gps-controller-test/savegps_200/http-response.adoc[]
+
+==== 응답 필드
+
+
+'''
+
+=== 스프링 배치를 이용한 GPS 등록하기
+
+==== 요청
+
+include::{snippets}/gps-controller-test/savegpsbybatch_200/http-request.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/gps-controller-test/savegpsbybatch_200/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/gps-controller-test/savegpsbybatch_200/http-response.adoc[]
+
+==== 응답 필드
+
+
+'''
+
+=== 게시글 관련 산책 경로 목록 조회하기
+
+==== 요청
+
+include::{snippets}/gps-controller-test/getgpslist_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/gps-controller-test/getgpslist_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/gps-controller-test/getgpslist_200/response-fields.adoc[]
+
+'''
+
+== 게시글 관련 API
+
+
+'''
+
+=== 게시글 등록하기
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/registerpost_200/http-request.adoc[]
+
+==== 요청 파츠
+
+include::{snippets}/job-post-controller-test/registerpost_200/request-parts.adoc[]
+
+==== 요청 필드
+
+include::{snippets}/job-post-controller-test/registerpost_200/request-fields.adoc[]
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/registerpost_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/registerpost_200/response-fields.adoc[]
+
+'''
+
+=== 게시글 검색조건 조회하기
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/searchpostwithcondition_200/http-request.adoc[]
+
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/searchpostwithcondition_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/searchpostwithcondition_200/response-fields.adoc[]
+
+'''
+
+=== 게시글의 산책 종료 설정하기
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/walkcomplete_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/walkcomplete_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/walkcomplete_200/response-fields.adoc[]
+
+'''
+
+=== 실시간 산책 중인 게시글 목록 조회하기
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/getwalkinglist_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/getwalkinglist_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/getwalkinglist_200/response-fields.adoc[]

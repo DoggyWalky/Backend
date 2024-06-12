@@ -29,7 +29,6 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    // Todo: 테스트 필요
     @PostMapping("/reports")
     public ResponseEntity reports(@RequestBody @Valid ReportRequestDto reportDto, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasFieldErrors("reportContent")) {
@@ -42,8 +41,9 @@ public class ReportController {
 
     // Todo: 검색조건을 사용해서 조회하기
     @GetMapping("/reports")
-    public Page<ReportResponseDto> getReportList(ReportSearchCondition condition, @PageableDefault Pageable pageable) {
-        return reportService.getReportList(condition, pageable);
+    public ResponseEntity getReportList(ReportSearchCondition condition, @PageableDefault Pageable pageable) {
+        Page<ReportResponseDto> reportList = reportService.getReportList(condition, pageable);
+        return new ResponseEntity<>(reportList,HttpStatus.OK);
     }
 
     @GetMapping("/reports/{report-id}/chat-list")
