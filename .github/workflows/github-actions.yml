@@ -47,6 +47,13 @@ jobs:
           JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
         run: ./gradlew clean build
 
+      - name: Upload test results
+        if: always() # 항상 아티팩트를 업로드하도록 설정
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: build/reports/tests/test
+
 
 #      # asciidoctor 실행!
 #      - name: Generate REST Docs
