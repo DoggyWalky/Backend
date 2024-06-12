@@ -40,34 +40,39 @@ class ChatControllerTest extends RestDocsTestSupport {
     @Test
     public void contact_200() throws Exception {
 
-        //given
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        ContactRequestDto dto = new ContactRequestDto(24L, 3L);
+        try {
+            //given
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            ContactRequestDto dto = new ContactRequestDto(24L, 3L);
 
-        // 요청 메시지 바디에 JSON 형태로 넣어주기 위해 객체 직렬화 합니다.
-        String contactRequestDto = objectMapper.writeValueAsString(dto);
+            // 요청 메시지 바디에 JSON 형태로 넣어주기 위해 객체 직렬화 합니다.
+            String contactRequestDto = objectMapper.writeValueAsString(dto);
 
-        // when
-        mockMvc.perform(post("/api/contact")
-                        .with(SecurityMockMvcRequestPostProcessors.user(userDetails))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(contactRequestDto))
-                .andExpect(status().isOk())
-                .andDo(restDocs.document(
-                        requestHeaders( // 요청 헤더 추가
-                                headerWithName("Authorization")
-                                        .description("Bearer 토큰")
-                        ),
-                        requestFields(  // 요청 필드 추가
-                                fieldWithPath("receiverId")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("채팅을 시도할 사용자의 고유 번호")
-                                        .attributes(constraints("채팅방을 생성하려는 게시글 작성자의 고유 번호여야합니다.")),
-                                fieldWithPath("jobPostId")
-                                        .type(JsonFieldType.NUMBER)
-                                        .description("채팅방을 생성할 게시글의 고유 번호")
-                        )
-                ));
+            // when
+            mockMvc.perform(post("/api/contact")
+                            .with(SecurityMockMvcRequestPostProcessors.user(userDetails))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(contactRequestDto))
+                    .andExpect(status().isOk())
+                    .andDo(restDocs.document(
+                            requestHeaders( // 요청 헤더 추가
+                                    headerWithName("Authorization")
+                                            .description("Bearer 토큰")
+                            ),
+                            requestFields(  // 요청 필드 추가
+                                    fieldWithPath("receiverId")
+                                            .type(JsonFieldType.NUMBER)
+                                            .description("채팅을 시도할 사용자의 고유 번호")
+                                            .attributes(constraints("채팅방을 생성하려는 게시글 작성자의 고유 번호여야합니다.")),
+                                    fieldWithPath("jobPostId")
+                                            .type(JsonFieldType.NUMBER)
+                                            .description("채팅방을 생성할 게시글의 고유 번호")
+                            )
+                    ));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @DisplayName("채팅방 숨김 테스트")
