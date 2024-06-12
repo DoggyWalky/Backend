@@ -45,7 +45,7 @@ jobs:
       - name: Build Test with Gradle
         env:
           JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
-        run: ./gradlew clean build --stacktrace
+        run: ./gradlew clean build --debug
 
       - name: Upload test results
         if: always() # 항상 아티팩트를 업로드하도록 설정
