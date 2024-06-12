@@ -59,7 +59,10 @@ jobs:
 
         # 경로검사
       - name: Check copied files
-        run: ls -la /home/runner/work/Backend/Backend/src/main/resources/static/docs
+        run: |
+          cd /home/runner/work/Backend/Backend
+          ls -la src/main/resources/static/docs
+        
 
       # docs 로그 출력
       - name: Upload build artifacts
@@ -87,7 +90,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-            sudo docker ps
+            sudo docker ps -q --filter "name=doggywalky-main" | grep -q . && sudo docker stop doggywalky-main && sudo docker rm doggywalky-main || true
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
             sudo docker run -d -p 8080:8080 --name doggywalky-main -e JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }} -e DISABLE_EC2_METADATA=${{ secrets.DISABLE_EC2_METADATA }} ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
             sudo docker image prune -f

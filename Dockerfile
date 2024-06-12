@@ -7,9 +7,6 @@ ARG JAR_FILE=build/libs/*.jar
 # JAR_FILE을 app.jar로 복사
 COPY ${JAR_FILE} /app/app.jar
 
-# 정적 리소스 파일을 복사
-COPY src/main/resources/static /app/src/main/resources/static
-
 # 런타임에 사용할 환경 변수를 설정하기 위해 ENV 사용
 ARG JASYPT_PASSWORD
 ENV JASYPT_PASSWORD_ENV=${JASYPT_PASSWORD}

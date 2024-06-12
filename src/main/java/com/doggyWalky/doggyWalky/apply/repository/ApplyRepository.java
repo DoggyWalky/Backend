@@ -20,8 +20,8 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
     @Query("select new com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto(a.id, a.jobPost.id, a.owner.id, a.worker.id, a.worker.name, mpi.nickName, mpi.description, mpi.profileImage, a.status, a.createdDate, a.updatedDate) " +
             "from Apply a " +
             "join MemberProfileInfo mpi on a.worker.id = mpi.member.id and mpi.deletedYn=false " +
-            "where a.jobPost.id = : jobPostId and a.owner.id =: ownerId and a.owner.deletedYn = false")
-    List<ApplyResponseDto> findListAppliedToTheJobPost(@Param("jobPostId") Long jobPostId, @Param("ownerId") Long ownerId);
+            "where a.jobPost.id = :jobPostId and a.owner.id = :ownerId and a.owner.deletedYn = false")
+    Page<ApplyResponseDto> findListAppliedToTheJobPost(@Param("jobPostId") Long jobPostId, @Param("ownerId") Long ownerId, Pageable pageable);
 
     @Query("select a from Apply a where a.id = :applyId and a.owner.id = :ownerId")
     Optional<Apply> findByOwner(@Param("applyId") Long applyId, @Param("ownerId") Long ownerId);

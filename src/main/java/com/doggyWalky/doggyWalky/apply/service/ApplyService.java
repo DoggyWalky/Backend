@@ -67,7 +67,7 @@ public class ApplyService {
      * 신청 목록 조회
      */
     @Transactional(readOnly = true)
-    public List<ApplyResponseDto> getApplyList(Long jobPostId, Long memberId) {
+    public Page<ApplyResponseDto> getApplyList(Long jobPostId, Long memberId, Pageable pageable) {
         JobPost jobPost = jobPostRepository.findJobPostByIdNotDeleted(jobPostId).orElseThrow(() -> new ApplicationException(ErrorCode.JOBPOST_NOT_FOUND));
 
         // 게시글 작성자 본인이 아닐경우 예외 발생
@@ -75,7 +75,7 @@ public class ApplyService {
             throw new ApplicationException(ErrorCode.NOT_JOBPOST_WRITER);
         }
 
-        return applyRepository.findListAppliedToTheJobPost(jobPost.getId(), jobPost.getMember().getId());
+        return applyRepository.findListAppliedToTheJobPost(jobPostId, jobPost.getMember().getId(), pageable);
 
     }
 

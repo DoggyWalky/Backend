@@ -17,7 +17,6 @@ public class MemberProfileResponseDto {
 
     private String updatedAt;
 
-    //Todo: 파일 이미지 추가
     private String profileImage;
 
     public MemberProfileResponseDto(Long memberId, String nickName, String description, LocalDateTime createdAt, LocalDateTime updatedAt, String profileImage) {

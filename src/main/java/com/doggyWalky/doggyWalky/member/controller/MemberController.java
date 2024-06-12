@@ -55,7 +55,6 @@ public class MemberController {
     public ResponseEntity getMember(Principal principal) {
         Long memberId = Long.parseLong(principal.getName());
         List<MemberProfileResponseDto> memberProfiles = memberService.getMemberProfiles(memberId);
-        System.out.println(memberProfiles);
         return new ResponseEntity(memberProfiles, HttpStatus.OK);
     }
 
@@ -97,7 +96,6 @@ public class MemberController {
     /**
      * 다른 회원 프로필 조회하기
      */
-    // Todo: 다른 사람 프로필 조회하는 API 작성하기
     @GetMapping("/members/{user-id}/profile")
     public ResponseEntity getMemberProfile(@PathVariable("user-id") Long memberId) {
         List<MemberProfileResponseDto> memberProfiles = memberService.getMemberProfiles(memberId);
