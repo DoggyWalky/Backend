@@ -1,15 +1,12 @@
 package com.doggyWalky.doggyWalky.gps.controller;
 
-import com.doggyWalky.doggyWalky.apply.entity.Apply;
 import com.doggyWalky.doggyWalky.common.RestDocsTestSupport;
-import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.gps.dto.request.GpsRequestDto;
 import com.doggyWalky.doggyWalky.gps.dto.response.GpsResponseDto;
 import com.doggyWalky.doggyWalky.gps.service.GpsService;
-import com.doggyWalky.doggyWalky.member.entity.Member;
-import com.doggyWalky.doggyWalky.report.dto.response.ReportResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -19,14 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,15 +36,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -63,7 +58,16 @@ class GpsControllerTest extends RestDocsTestSupport  {
 
 
     @MockBean
+    private RedisTemplate<String, String> redisTemplate;
+
+    @MockBean
     private JobLauncher jobLauncher;
+
+    @MockBean
+    private Job gpsJob;
+
+    @Mock
+    private ValueOperations<String, String> valueOperations;
 
 
     @Autowired
@@ -86,7 +90,7 @@ class GpsControllerTest extends RestDocsTestSupport  {
         List<GpsRequestDto> gpsList = Arrays.asList(gpsDto1,gpsDto2,gpsDto3,gpsDto4,gpsDto5);
         String gpsListToJson = objectMapper.writeValueAsString(gpsList);
 
-        Mockito.doNothing().when(gpsService).saveGpsList(gpsList);
+        doNothing().when(gpsService).saveGpsList(gpsList);
 
         //when & then
         mockMvc.perform(post("/api/gps")
@@ -131,9 +135,15 @@ class GpsControllerTest extends RestDocsTestSupport  {
         List<GpsRequestDto> gpsList = Arrays.asList(gpsDto1,gpsDto2,gpsDto3,gpsDto4,gpsDto5);
         String gpsListToJson = objectMapper.writeValueAsString(gpsList);
 
+        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+        doNothing().when(valueOperations).set(anyString(), eq(gpsListToJson));
+
+        // JobLauncher와 관련된 Mock 설정
+        when(jobLauncher.run(eq(gpsJob), any(JobParameters.class))).thenReturn(null);
+
         // JobExecution 객체를 모킹합니다.
         JobExecution jobExecution = Mockito.mock(JobExecution.class);
-        Mockito.when(jobLauncher.run(any(Job.class), any(JobParameters.class))).thenReturn(jobExecution);
+        when(jobLauncher.run(any(Job.class), any(JobParameters.class))).thenReturn(jobExecution);
 
         //when & then
         mockMvc.perform(post("/api/gps-by-batch/{post-id}", 1L)
@@ -177,7 +187,7 @@ class GpsControllerTest extends RestDocsTestSupport  {
 
 
         Page<GpsResponseDto> pages = new PageImpl<>(Arrays.asList(responseDto1, responseDto2, responseDto3, responseDto4), PageRequest.of(0, 10), 4);
-        Mockito.when(gpsService.getGpsList(anyLong(), any(Pageable.class))).thenReturn(pages);
+        when(gpsService.getGpsList(anyLong(), any(Pageable.class))).thenReturn(pages);
 
         // when
         mockMvc.perform(get("/api/gps/job-post/{job-post-id}",1L)
