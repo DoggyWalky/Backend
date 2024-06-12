@@ -48,7 +48,7 @@ jobs:
         run: ./gradlew clean build
 
 
-#      # asciidoctor 실행
+#      # asciidoctor 실행!
 #      - name: Generate REST Docs
 #        env:
 #          JAVA_TOOL_OPTIONS: "-Djasypt.encryptor.password=${{ secrets.JASYPT_PASSWORD }} -Dcom.amazonaws.sdk.disableEc2Metadata=true"
