@@ -7,13 +7,13 @@ import lombok.Getter;
 @Getter
 public class MyApplyResponseDto {
 
-    // 작성자 id
+    // 게시글 작성자 id
     Long writerId;
 
-    // 작성자 닉네임
+    // 게시글 작성자 닉네임
     String nickName;
 
-    // 작성자 프로필 이미지
+    // 게시글 작성자 프로필 이미지
     String profileImage;
 
     // 게시글 id
@@ -23,7 +23,7 @@ public class MyApplyResponseDto {
     String title;
 
     // 게시글 이미지
-    String PostImage;
+    String postImage;
 
     // 게시글 구인 상태
     Status status;
@@ -46,7 +46,7 @@ public class MyApplyResponseDto {
         this.profileImage = profileImage;
         this.jobPostId = jobPostId;
         this.title = title;
-        this.PostImage = postImage;
+        this.postImage = postImage;
         this.status = status;
         this.dogId = dogId;
         this.kind = kind;
