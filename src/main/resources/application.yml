@@ -92,12 +92,12 @@ cloud:
 #    p6spy: DEBUG
 logging:
   level:
-    root: DEBUG
+    root: ERROR
     org:
       springframework:
         security: DEBUG
-    org.springframework: DEBUG
-    org.junit.jupiter: DEBUG
+    org.springframework: ERROR
+    org.junit.jupiter: ERROR
 
 ## p6spy query logging
 decorator:
