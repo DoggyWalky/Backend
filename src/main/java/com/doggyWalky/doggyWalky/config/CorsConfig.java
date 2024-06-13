@@ -19,8 +19,9 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(FRONT_SERVER_HOST, FRONT_LOCAL_HOST));
+//        config.setAllowedOrigins(List.of(FRONT_SERVER_HOST, FRONT_LOCAL_HOST));
         config.setExposedHeaders(List.of("Authorization", "Refresh"));
+        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
