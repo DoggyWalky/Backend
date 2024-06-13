@@ -1,4 +1,4 @@
-= DoggyWalky API Documentation
+= DoggyWalky Main Server API Documentation
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
