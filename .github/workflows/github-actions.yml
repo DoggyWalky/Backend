@@ -63,6 +63,6 @@ jobs:
           script: |
             sudo docker ps -q --filter "name=doggywalky-main" | grep -q . && sudo docker stop doggywalky-main && sudo docker rm doggywalky-main || true
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
-            sudo docker run -d -p 8080:8080 --name doggywalky-main -e JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }} -e DISABLE_EC2_METADATA=${{ secrets.DISABLE_EC2_METADATA }} ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
+            sudo docker run -d --network host --name doggywalky-main -e JASYPT_PASSWORD=${{ secrets.JASYPT_PASSWORD }} -e DISABLE_EC2_METADATA=${{ secrets.DISABLE_EC2_METADATA }} ${{ secrets.DOCKER_USERNAME }}/docker-doggywalky:latest
             sudo docker image prune -f
 
