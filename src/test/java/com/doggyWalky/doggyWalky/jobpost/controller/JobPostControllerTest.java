@@ -1,6 +1,7 @@
 package com.doggyWalky.doggyWalky.jobpost.controller;
 
 import com.doggyWalky.doggyWalky.common.RestDocsTestSupport;
+import com.doggyWalky.doggyWalky.dog.entity.DogSize;
 import com.doggyWalky.doggyWalky.jobpost.dto.*;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
@@ -26,6 +27,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,7 +64,7 @@ class JobPostControllerTest extends RestDocsTestSupport {
         //given
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-        JobPostRegisterRequest jobPostRegisterRequest = new JobPostRegisterRequest("게시글 제목","게시글 내용", Status.WAITING,"출발지","목적지",3L);
+        JobPostRegisterRequest jobPostRegisterRequest = new JobPostRegisterRequest("게시글 제목","게시글 내용", Status.WAITING,"출발지","bcode",3L);
         String jobPostToJson = objectMapper.writeValueAsString(jobPostRegisterRequest);
 
         MockMultipartFile jobPost = new MockMultipartFile("jobPost", "", "application/json", jobPostToJson.getBytes());
@@ -70,7 +72,7 @@ class JobPostControllerTest extends RestDocsTestSupport {
         MockMultipartFile image2 = new MockMultipartFile("images", "image2.jpg", "image/jpeg", "test image 2".getBytes());
 
         JobPostRegisterResponse response = new JobPostRegisterResponse(1L,1L,jobPostRegisterRequest.getTitle(),
-                jobPostRegisterRequest.getContent(),jobPostRegisterRequest.getStatus().getEnStatus(),jobPostRegisterRequest.getStartPoint(),jobPostRegisterRequest.getEndPoint()
+                jobPostRegisterRequest.getContent(),jobPostRegisterRequest.getStatus().getEnStatus(),jobPostRegisterRequest.getStartPoint(),jobPostRegisterRequest.getBcode()
         , jobPostRegisterRequest.getDogId(), Arrays.asList(image1.getName(), image2.getName()));
 
         Mockito.when(jobPostService.register(any(Long.class), any(JobPostRegisterRequest.class), any(List.class))).thenReturn(response);
@@ -137,9 +139,9 @@ class JobPostControllerTest extends RestDocsTestSupport {
         //given
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-        JobPost jobPost1 = new JobPost("Title1", "Content1", Status.WAITING, WalkingProcessStatus.PREWALK,"StartPoint1", "EndPoint1", 1L,false);
-        JobPost jobPost2 = new JobPost("Title2", "Content2", Status.WAITING, WalkingProcessStatus.PREWALK,"StartPoint2", "EndPoint2", 2L,false);
-        List<JobPost> jobPosts = Arrays.asList(jobPost1, jobPost2);
+        JobPostResponseDto jobPost1 = new JobPostResponseDto(1L,"Title1", "Content1", Status.WAITING, WalkingProcessStatus.PREWALK,"StartPoint1", "becode1", 1L,"image1",false, LocalDateTime.now(),LocalDateTime.now(), DogSize.LARGE);
+        JobPostResponseDto jobPost2 = new JobPostResponseDto(2L,"Title2", "Content2", Status.WAITING, WalkingProcessStatus.PREWALK,"StartPoint2", "becode2", 2L,"image2",false,LocalDateTime.now(),LocalDateTime.now(), DogSize.LARGE);
+        List<JobPostResponseDto> jobPosts = Arrays.asList(jobPost1, jobPost2);
 
         Mockito.when(jobPostService.searchJobPosts(Mockito.any(JobPostSearchCriteria.class)))
                 .thenReturn(jobPosts);
@@ -156,19 +158,19 @@ class JobPostControllerTest extends RestDocsTestSupport {
                                         .description("Bearer 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).optional().description("게시글 ID"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("게시글 ID"),
                                 fieldWithPath("[].title").type(JsonFieldType.STRING).description("게시글 제목"),
                                 fieldWithPath("[].content").type(JsonFieldType.STRING).description("게시글 내용"),
                                 fieldWithPath("[].status").type(JsonFieldType.STRING).description("게시글 상태"),
+                                fieldWithPath("[].walkingProcessStatus").type(JsonFieldType.STRING).description("게시글 산책 진행 상태"),
                                 fieldWithPath("[].startPoint").type(JsonFieldType.STRING).description("출발지"),
-                                fieldWithPath("[].endPoint").type(JsonFieldType.STRING).description("목적지"),
+                                fieldWithPath("[].bcode").type(JsonFieldType.STRING).description("bcode"),
                                 fieldWithPath("[].dogId").type(JsonFieldType.NUMBER).description("강아지 ID"),
+                                fieldWithPath("[].defaultImage").type(JsonFieldType.STRING).optional().description("게시글 기본 이미지"),
+                                fieldWithPath("[].deletedYn").type(JsonFieldType.BOOLEAN).description("게시글 삭제 여부"),
                                 fieldWithPath("[].createdDate").type(JsonFieldType.VARIES).optional().description("게시글 생성 일시"),
                                 fieldWithPath("[].updatedDate").type(JsonFieldType.VARIES).optional().description("게시글 수정 일시"),
-                                fieldWithPath("[].member").type(JsonFieldType.VARIES).optional().description("게시글 작성자"),
-                                fieldWithPath("[].walkingProcessStatus").type(JsonFieldType.STRING).description("게시글 산책 진행 상태"),
-                                fieldWithPath("[].defaultImage").type(JsonFieldType.STRING).optional().description("게시글 이미지 주소"),
-                                fieldWithPath("[].deletedYn").type(JsonFieldType.BOOLEAN).description("게시글 삭제 여부")
+                                fieldWithPath("[].dogSize").type(JsonFieldType.STRING).description("강아지 크기")
                         )));
     }
 

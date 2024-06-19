@@ -27,7 +27,7 @@ public class JobPostRegisterRequest {
 
     private String startPoint;
 
-    private String endPoint;
+    private String bcode;
 
     private Long dogId;
 
@@ -38,8 +38,7 @@ public class JobPostRegisterRequest {
                 .content(this.content)
                 .status(this.status)
                 .startPoint(this.startPoint)
-                .endPoint(this.endPoint)
-                .dogId(this.dogId)
+                .bcode(this.bcode)
                 .deletedYn(false)
                 .build();
     }

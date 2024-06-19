@@ -1,6 +1,7 @@
 package com.doggyWalky.doggyWalky.jobpost.controller;
 
 import com.amazonaws.Response;
+import com.doggyWalky.doggyWalky.dog.entity.DogSize;
 import com.doggyWalky.doggyWalky.jobpost.dto.*;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/job-post")
@@ -48,16 +50,21 @@ public class JobPostController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<JobPost>> searchJobPosts(
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String startPoint) {
+    public ResponseEntity<List<JobPostResponseDto>> searchJobPosts(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) List<String> status,
+            @RequestParam(required = false) String bcode,
+            @RequestParam(required = false) List<String> dogSize,
+            @RequestParam(required = false) String sortOption) {
+        log.info("keyword :" + keyword);
         JobPostSearchCriteria criteria = new JobPostSearchCriteria();
-        criteria.setTitle(title);
-        criteria.setStatus(status != null ? Status.valueOf(status) : null);
-        criteria.setStartPoint(startPoint);
+        criteria.setTitle(keyword);
+        criteria.setStatuses(status != null ? status.stream().map(Status::valueOf).collect(Collectors.toList()) : null);
+        criteria.setDogSizes(dogSize != null ? dogSize.stream().map(DogSize::valueOf).collect(Collectors.toList()) : null);
+        criteria.setBcode(bcode);
+        criteria.setSortOption(sortOption);
 
-        List<JobPost> jobPosts = jobPostService.searchJobPosts(criteria);
+        List<JobPostResponseDto> jobPosts = jobPostService.searchJobPosts(criteria);
         return ResponseEntity.ok(jobPosts);
     }
 

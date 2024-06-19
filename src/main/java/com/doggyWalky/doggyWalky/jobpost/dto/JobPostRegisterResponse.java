@@ -26,7 +26,7 @@ public class JobPostRegisterResponse {
 
     private String startPoint;
 
-    private String endPoint;
+    private String bcode;
 
     private Long dogId;
 
@@ -39,8 +39,8 @@ public class JobPostRegisterResponse {
         this.content = jobPost.getContent();
         this.status = jobPost.getStatus().getEnStatus();
         this.startPoint = jobPost.getStartPoint();
-        this.endPoint = jobPost.getEndPoint();
-        this.dogId = jobPost.getDogId();
+        this.bcode= jobPost.getBcode();
+        this.dogId = jobPost.getDog().getDogId();
     }
 
 
