@@ -4,6 +4,7 @@ import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
 import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.constant.ConstantPool.ApplyStatus;
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
+import com.doggyWalky.doggyWalky.jobpost.dto.JobPostDetailResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostWalkingResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.dto.MyJobPostResponseDto;
@@ -41,5 +42,11 @@ public interface JobPostRepository extends JpaRepository<JobPost, Long>, JpaSpec
             "join Dog d on jp.dog.dogId = d.dogId " +
             "where jp.member.id = :memberId and jp.deletedYn = false")
     Page<MyJobPostResponseDto> findListAppliedToTheJobPost(@Param("memberId") Long memberId, Pageable pageable);
+
+    @Query("select new com.doggyWalky.doggyWalky.jobpost.dto.JobPostDetailResponseDto(jp.member.id, mpi.profileImage, mpi.nickName, jp.id, jp.title, jp.defaultImage, jp.content, jp.status,jp.startPoint,jp.bcode,jp.createdDate,d.dogId,d.profileImage,d.name,d.dogSize) from JobPost jp " +
+            "join MemberProfileInfo mpi on jp.member.id = mpi.member.id " +
+            "join Dog d on jp.dog.dogId = d.dogId " +
+            "where jp.deletedYn = false and jp.id = :jobPostId and mpi.deletedYn = false")
+    Optional<JobPostDetailResponseDto> findJobPostDetailByPostId(@Param("jobPostId") Long jobPostId);
 }
 

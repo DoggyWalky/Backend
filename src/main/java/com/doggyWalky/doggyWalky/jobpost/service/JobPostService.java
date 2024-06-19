@@ -107,6 +107,14 @@ public class JobPostService {
     }
 
     /**
+     * 게시글 상세 조회
+     */
+    public JobPostDetailResponseDto getJobPostDetail(Long jobPostId) {
+        JobPostDetailResponseDto jobPostDetailResponseDto = jobPostRepository.findJobPostDetailByPostId(jobPostId).orElseThrow(() -> new ApplicationException(ErrorCode.JOBPOST_NOT_FOUND));
+        return jobPostDetailResponseDto;
+    }
+
+    /**
      * 내가 작성한 게시글 목록 조회
      */
     @Transactional(readOnly = true)

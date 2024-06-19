@@ -1,10 +1,7 @@
 package com.doggyWalky.doggyWalky.jobpost.controller;
 
-import com.amazonaws.Response;
-import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
 import com.doggyWalky.doggyWalky.jobpost.dto.*;
-import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.service.JobPostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,6 +66,15 @@ public class JobPostController {
 
         List<JobPostResponseDto> jobPosts = jobPostService.searchJobPosts(criteria);
         return ResponseEntity.ok(jobPosts);
+    }
+
+    /**
+     * 게시글 상세 조회하기
+     */
+    @GetMapping("/{job-post-Id}")
+    public ResponseEntity<JobPostDetailResponseDto> getPostDetail(@PathVariable("job-post-id") Long jobPostId) {
+        JobPostDetailResponseDto dto = jobPostService.getJobPostDetail(jobPostId);
+        return new ResponseEntity(dto, HttpStatus.OK);
     }
 
     /**
