@@ -1,5 +1,6 @@
 package com.doggyWalky.doggyWalky.jobpost.service;
 
+import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
 import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.dog.entity.Dog;
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
@@ -103,6 +104,14 @@ public class JobPostService {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 내가 작성한 게시글 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public Page<MyJobPostResponseDto>  getMyPostList(Long memberId, Pageable pageable) {
+        return jobPostRepository.findListAppliedToTheJobPost(memberId, pageable);
     }
 
 

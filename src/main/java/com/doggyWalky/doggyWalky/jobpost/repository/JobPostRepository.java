@@ -1,10 +1,12 @@
 package com.doggyWalky.doggyWalky.jobpost.repository;
 
+import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
 import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.constant.ConstantPool.ApplyStatus;
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostWalkingResponseDto;
+import com.doggyWalky.doggyWalky.jobpost.dto.MyJobPostResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.entity.WalkingProcessStatus;
@@ -34,5 +36,10 @@ public interface JobPostRepository extends JpaRepository<JobPost, Long>, JpaSpec
                                                                    @Param("walkStatus") WalkingProcessStatus walkStatus,
                                                                    @Param("applyStatus") ApplyStatus applyStatus,
                                                                    Pageable pageable);
+
+    @Query("select new com.doggyWalky.doggyWalky.jobpost.dto.MyJobPostResponseDto(jp.id, jp.title,jp.defaultImage,jp.status,d.dogSize,jp.startPoint,jp.createdDate) from JobPost jp " +
+            "join Dog d on jp.dog.dogId = d.dogId " +
+            "where jp.member.id = :memberId and jp.deletedYn = false")
+    Page<MyJobPostResponseDto> findListAppliedToTheJobPost(@Param("memberId") Long memberId, Pageable pageable);
 }
 

@@ -1,6 +1,7 @@
 package com.doggyWalky.doggyWalky.jobpost.controller;
 
 import com.amazonaws.Response;
+import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
 import com.doggyWalky.doggyWalky.jobpost.dto.*;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
@@ -10,7 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +69,24 @@ public class JobPostController {
 
         List<JobPostResponseDto> jobPosts = jobPostService.searchJobPosts(criteria);
         return ResponseEntity.ok(jobPosts);
+    }
+
+    /**
+     * 내가 작성한 게시글 목록 조회하기
+     */
+    @GetMapping("/my-post")
+    public ResponseEntity<Page<MyJobPostResponseDto>> getMyPostList(Principal principal,@PageableDefault(size = 10,sort="createdDate", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
+        Long memberId = Long.parseLong(principal.getName());
+
+        // 기본 Sort 설정
+        Sort sort = pageable.getSort();
+
+        // Pageable 객체 생성
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        Page<MyJobPostResponseDto> myPostList = jobPostService.getMyPostList(memberId, sortedPageable);
+        return new ResponseEntity<>(myPostList, HttpStatus.OK);
+
     }
 
     /**
