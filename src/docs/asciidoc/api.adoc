@@ -609,6 +609,44 @@ include::{snippets}/job-post-controller-test/walkcomplete_200/response-fields.ad
 
 '''
 
+=== 게시글 상세 조회
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/getpostdetail_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/getpostdetail_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/getpostdetail_200/response-fields.adoc[]
+
+'''
+
+=== 내가 작성한 게시글 목록 조회
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/getmypostlist_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/getmypostlist_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/getmypostlist_200/response-fields.adoc[]
+
+'''
+
 === 실시간 산책 중인 게시글 목록 조회하기
 
 ==== 요청

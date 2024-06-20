@@ -6,7 +6,6 @@ import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

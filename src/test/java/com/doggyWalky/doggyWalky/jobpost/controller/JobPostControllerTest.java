@@ -98,7 +98,7 @@ class JobPostControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("등록할 게시글의 내용"),
                                 fieldWithPath("status").type(JsonFieldType.STRING).description("등록할 게시글의 구인 상태"),
                                 fieldWithPath("startPoint").type(JsonFieldType.STRING).description("등록할 게시글의 출발지"),
-                                fieldWithPath("endPoint").type(JsonFieldType.STRING).description("등록할 게시글의 목적지"),
+                                fieldWithPath("bcode").type(JsonFieldType.STRING).description("등록할 게시글의 Bcode"),
                                 fieldWithPath("dogId").type(JsonFieldType.NUMBER).description("등록할 게시글에서 산책시킬 강아지의 고유 번호")
                         ),
                         responseFields( // 응답 필드 추가
@@ -120,15 +120,156 @@ class JobPostControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("startPoint")
                                         .type(JsonFieldType.STRING)
                                         .description("등록한 게시글의 출발지"),
-                                fieldWithPath("endPoint")
+                                fieldWithPath("bcode")
                                         .type(JsonFieldType.STRING)
-                                        .description("등록한 게시글의 목적지"),
+                                        .description("등록한 게시글의 Bcode"),
                                 fieldWithPath("dogId")
                                         .type(JsonFieldType.NUMBER)
                                         .description("등록한 게시글의 산책시킬 강아지의 고유 번호"),
                                 fieldWithPath("images")
                                         .type(JsonFieldType.VARIES)
                                         .description("등록한 게시글의 파일 이미지")
+                        )
+                ));
+    }
+
+    @DisplayName("게시글 상세 조회 테스트")
+    @Test
+    public void getpostdetail_200() throws Exception {
+        //given
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        JobPostDetailResponseDto dto = new JobPostDetailResponseDto(1L, "memberImage.jpg", "작성자 닉네임", 1L, "게시글 제목", "postImage.jpg", "Content", Status.WAITING, "출발지", "bcode", LocalDateTime.now(), 1L, "dogImage.jpg", "강아지 이름", DogSize.LARGE);
+
+        Mockito.when(jobPostService.getJobPostDetail(any(Long.class))).thenReturn(dto);
+
+
+        //when & then
+        mockMvc.perform(get("/api/job-post/{job-post-id}",1L)
+                        .with(SecurityMockMvcRequestPostProcessors.user(userDetails)))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestHeaders( // 요청 헤더 추가
+                                headerWithName("Authorization")
+                                        .description("Bearer 토큰")
+                        ),
+                        responseFields( // 응답 필드 추가
+                                fieldWithPath("memberId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("게시글 작성자의 고유 번호"),
+                                fieldWithPath("memberProfileImage")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글 작성자의 프로필 이미지 주소"),
+                                fieldWithPath("memberNickname")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글 작성자의 닉네임"),
+                                fieldWithPath("postId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("게시글의 고유 번호"),
+                                fieldWithPath("title")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글의 제목"),
+                                fieldWithPath("postImage")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글의 이미지 주소"),
+                                fieldWithPath("content")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글의 내용"),
+                                fieldWithPath("status")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("게시글의 예약 상태"),
+                                fieldWithPath("startPoint")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글의 산책 출발지"),
+                                fieldWithPath("bcode")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글의 산책 출발지의 Bcode"),
+                                fieldWithPath("createdDate")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("게시글 생성 일시"),
+                                fieldWithPath("dogId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("강아지의 고유 번호"),
+                                fieldWithPath("dogProfile")
+                                        .type(JsonFieldType.STRING)
+                                        .description("강아지의 프로필 이미지 주소"),
+                                fieldWithPath("dogName")
+                                        .type(JsonFieldType.STRING)
+                                        .description("강아지의 이름"),
+                                fieldWithPath("dogSize")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("강아지 분류")
+
+                        )
+                ));
+    }
+
+    @DisplayName("내가 작성한 게시글 목록 조회 테스트")
+    @Test
+    public void getmypostlist_200() throws Exception {
+        //given
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        MyJobPostResponseDto dto1 = new MyJobPostResponseDto(1L, "게시글 제목1", "PostImage1.jpg", Status.WAITING, DogSize.MEDIUM, "출발지1", LocalDateTime.now());
+        MyJobPostResponseDto dto2 = new MyJobPostResponseDto(2L, "게시글 제목2", "PostImage2.jpg", Status.WAITING, DogSize.LARGE, "출발지2", LocalDateTime.now());
+
+        Page<MyJobPostResponseDto> page = new PageImpl<>(Arrays.asList(dto1, dto2), PageRequest.of(0,10), 2);
+
+        Mockito.when(jobPostService.getMyPostList(Mockito.anyLong(),Mockito.any(Pageable.class)))
+                .thenReturn(page);
+
+        //when & then
+        mockMvc.perform(get("/api/job-post/my-post")
+                        .param("page","0")
+                        .param("size","10")
+                        .with(SecurityMockMvcRequestPostProcessors.user(userDetails)))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestHeaders( // 요청 헤더 추가
+                                headerWithName("Authorization")
+                                        .description("Bearer 토큰")
+                        ),
+                        responseFields( // 응답 필드 추가
+                                fieldWithPath("content[].postId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("게시글의 고유 번호"),
+                                fieldWithPath("content[].title")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글 제목"),
+                                fieldWithPath("content[].fileImage")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글 이미지 주소"),
+                                fieldWithPath("content[].status")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("게시글 예약 상태"),
+                                fieldWithPath("content[].dogSize")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("강아지 분류"),
+                                fieldWithPath("content[].startPoint")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글의 출발지"),
+                                fieldWithPath("content[].createdDate")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("게시글 생성 일시"),
+                                fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description("페이지 번호"),
+                                fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER).description("페이지 크기"),
+                                fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 여부"),
+                                fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬된 상태"),
+                                fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않은 상태"),
+                                fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER).description("오프셋"),
+                                fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN).description("페이지되지 않은 상태"),
+                                fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN).description("페이지 상태"),
+                                fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
+                                fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 요소 수"),
+                                fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+                                fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 크기"),
+                                fieldWithPath("number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 정보가 비어 있는지 여부"),
+                                fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬된 상태"),
+                                fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않은 상태"),
+                                fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부"),
+                                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지의 요소 수"),
+                                fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어있는지 여부")
                         )
                 ));
     }
@@ -147,9 +288,13 @@ class JobPostControllerTest extends RestDocsTestSupport {
                 .thenReturn(jobPosts);
 
         mockMvc.perform(get("/api/job-post/search")
-                        .param("title", "Title")
+                        .param("keyword", "keyword")
                         .param("status", "WAITING")
-                        .param("startPoint", "StartPoint")
+                        .param("status","RESERVED")
+                        .param("bcode", "bcode")
+                        .param("sortOption","desc")
+                        .param("dogSize","SMALL")
+                        .param("dogSize","MEDIUM")
                         .contentType(MediaType.APPLICATION_JSON).with(SecurityMockMvcRequestPostProcessors.user(userDetails)))
                 .andExpect(status().isOk())
                 .andDo(restDocs.document(

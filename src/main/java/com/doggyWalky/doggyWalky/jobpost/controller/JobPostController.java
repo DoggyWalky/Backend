@@ -71,7 +71,7 @@ public class JobPostController {
     /**
      * 게시글 상세 조회하기
      */
-    @GetMapping("/{job-post-Id}")
+    @GetMapping("/{job-post-id}")
     public ResponseEntity<JobPostDetailResponseDto> getPostDetail(@PathVariable("job-post-id") Long jobPostId) {
         JobPostDetailResponseDto dto = jobPostService.getJobPostDetail(jobPostId);
         return new ResponseEntity(dto, HttpStatus.OK);

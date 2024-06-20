@@ -1,15 +1,10 @@
 package com.doggyWalky.doggyWalky.jobpost.repository;
 
-import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
-import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.constant.ConstantPool.ApplyStatus;
-import com.doggyWalky.doggyWalky.dog.entity.DogSize;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostDetailResponseDto;
-import com.doggyWalky.doggyWalky.jobpost.dto.JobPostResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.dto.JobPostWalkingResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.dto.MyJobPostResponseDto;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
-import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.entity.WalkingProcessStatus;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
