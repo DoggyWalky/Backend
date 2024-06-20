@@ -1,15 +1,16 @@
 package com.doggyWalky.doggyWalky.jobpost.controller;
 
-import com.amazonaws.Response;
+import com.doggyWalky.doggyWalky.dog.entity.DogSize;
 import com.doggyWalky.doggyWalky.jobpost.dto.*;
-import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.service.JobPostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/job-post")
@@ -48,17 +50,49 @@ public class JobPostController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<JobPost>> searchJobPosts(
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String startPoint) {
+    public ResponseEntity<List<JobPostResponseDto>> searchJobPosts(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) List<String> status,
+            @RequestParam(required = false) String bcode,
+            @RequestParam(required = false) List<String> dogSize,
+            @RequestParam(required = false) String sortOption) {
+        log.info("keyword :" + keyword);
         JobPostSearchCriteria criteria = new JobPostSearchCriteria();
-        criteria.setTitle(title);
-        criteria.setStatus(status != null ? Status.valueOf(status) : null);
-        criteria.setStartPoint(startPoint);
+        criteria.setTitle(keyword);
+        criteria.setStatuses(status != null ? status.stream().map(Status::valueOf).collect(Collectors.toList()) : null);
+        criteria.setDogSizes(dogSize != null ? dogSize.stream().map(DogSize::valueOf).collect(Collectors.toList()) : null);
+        criteria.setBcode(bcode);
+        criteria.setSortOption(sortOption);
 
-        List<JobPost> jobPosts = jobPostService.searchJobPosts(criteria);
+        List<JobPostResponseDto> jobPosts = jobPostService.searchJobPosts(criteria);
         return ResponseEntity.ok(jobPosts);
+    }
+
+    /**
+     * 게시글 상세 조회하기
+     */
+    @GetMapping("/{job-post-id}")
+    public ResponseEntity<JobPostDetailResponseDto> getPostDetail(@PathVariable("job-post-id") Long jobPostId) {
+        JobPostDetailResponseDto dto = jobPostService.getJobPostDetail(jobPostId);
+        return new ResponseEntity(dto, HttpStatus.OK);
+    }
+
+    /**
+     * 내가 작성한 게시글 목록 조회하기
+     */
+    @GetMapping("/my-post")
+    public ResponseEntity<Page<MyJobPostResponseDto>> getMyPostList(Principal principal,@PageableDefault(size = 10,sort="createdDate", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
+        Long memberId = Long.parseLong(principal.getName());
+
+        // 기본 Sort 설정
+        Sort sort = pageable.getSort();
+
+        // Pageable 객체 생성
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        Page<MyJobPostResponseDto> myPostList = jobPostService.getMyPostList(memberId, sortedPageable);
+        return new ResponseEntity<>(myPostList, HttpStatus.OK);
+
     }
 
     /**

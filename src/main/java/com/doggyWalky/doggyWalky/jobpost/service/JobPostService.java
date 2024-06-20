@@ -1,6 +1,10 @@
 package com.doggyWalky.doggyWalky.jobpost.service;
 
+import com.doggyWalky.doggyWalky.apply.dto.response.ApplyResponseDto;
 import com.doggyWalky.doggyWalky.constant.ConstantPool;
+import com.doggyWalky.doggyWalky.dog.entity.Dog;
+import com.doggyWalky.doggyWalky.dog.entity.DogSize;
+import com.doggyWalky.doggyWalky.dog.repository.DogRepository;
 import com.doggyWalky.doggyWalky.exception.ApplicationException;
 import com.doggyWalky.doggyWalky.exception.ErrorCode;
 import com.doggyWalky.doggyWalky.file.common.BasicImage;
@@ -36,6 +40,8 @@ public class JobPostService {
 
     private final JobPostRepository jobPostRepository;
 
+    private final DogRepository dogRepository;
+
     private final MemberService memberService;
 
     private final FileService fileService;
@@ -45,6 +51,8 @@ public class JobPostService {
 
         Member member = memberService.findByMemberId(memberId);
         JobPost jobPost = jobPostRegisterRequest.toEntity();
+        Dog dog = dogRepository.findById(jobPostRegisterRequest.getDogId()).get();
+        jobPost.setDog(dog);
         jobPost.assignWriter(member);
         JobPost savedJobPost = jobPostRepository.save(jobPost);
 
@@ -61,15 +69,59 @@ public class JobPostService {
         return new JobPostRegisterResponse(savedJobPost);
     }
 
-    public List<JobPost> searchJobPosts(JobPostSearchCriteria criteria) {
-        return jobPostRepository.findAll(Specification.where(
-                JobPostSpecifications.withDynamicQuery(
-                        criteria.getTitle(),
-                        criteria.getStatus(),
-                        criteria.getStartPoint()
-                )
-        ));
+    public List<JobPostResponseDto> searchJobPosts(JobPostSearchCriteria criteria) {
+        Specification<JobPost> specification = JobPostSpecifications.withDynamicQuery(
+                criteria.getTitle(),
+                criteria.getStatuses(),
+                criteria.getDogSizes(),
+                criteria.getBcode(),
+                criteria.getSortOption()
+        );
+
+        List<JobPost> jobPosts = jobPostRepository.findAll(specification);
+
+        return jobPosts.stream()
+                .map(jobPost -> {
+                    DogSize dogSize = null;
+                    Dog dog = jobPost.getDog();
+                    if (dog != null) {
+                        dogSize = dog.getDogSize();
+                    }
+                    return new JobPostResponseDto(
+                            jobPost.getId(),
+                            jobPost.getTitle(),
+                            jobPost.getContent(),
+                            jobPost.getStatus(),
+                            jobPost.getWalkingProcessStatus(),
+                            jobPost.getStartPoint(),
+                            jobPost.getBcode(),
+                            jobPost.getDog().getDogId(),
+                            jobPost.getDefaultImage(),
+                            jobPost.getDeletedYn(),
+                            jobPost.getCreatedDate(),
+                            jobPost.getUpdatedDate(),
+                            dogSize
+                    );
+                })
+                .collect(Collectors.toList());
     }
+
+    /**
+     * 게시글 상세 조회
+     */
+    public JobPostDetailResponseDto getJobPostDetail(Long jobPostId) {
+        JobPostDetailResponseDto jobPostDetailResponseDto = jobPostRepository.findJobPostDetailByPostId(jobPostId).orElseThrow(() -> new ApplicationException(ErrorCode.JOBPOST_NOT_FOUND));
+        return jobPostDetailResponseDto;
+    }
+
+    /**
+     * 내가 작성한 게시글 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public Page<MyJobPostResponseDto>  getMyPostList(Long memberId, Pageable pageable) {
+        return jobPostRepository.findListAppliedToTheJobPost(memberId, pageable);
+    }
+
 
     /**
      * 게시글 산책 진행 상태 완료 변경 로직

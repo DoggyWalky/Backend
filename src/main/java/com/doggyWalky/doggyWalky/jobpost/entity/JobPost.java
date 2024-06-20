@@ -1,6 +1,7 @@
 package com.doggyWalky.doggyWalky.jobpost.entity;
 
 import com.doggyWalky.doggyWalky.common.entity.BaseEntity;
+import com.doggyWalky.doggyWalky.dog.entity.Dog;
 import com.doggyWalky.doggyWalky.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,11 +37,12 @@ public class JobPost extends BaseEntity {
     @Column(name = "start_point")
     private String startPoint;
 
-    @Column(name = "end_point")
-    private String endPoint;
+    @Column(name = "bcode")
+    private String bcode;
 
-    @Column(name = "dog_id" )
-    private Long dogId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="dog_id")
+    private Dog dog;
 
 
     private String defaultImage;
@@ -49,14 +51,14 @@ public class JobPost extends BaseEntity {
     private Boolean deletedYn;
 
     @Builder
-    public JobPost(String title, String content, Status status,WalkingProcessStatus walkingProcessStatus, String startPoint, String endPoint, Long dogId, Boolean deletedYn) {
+    public JobPost(String title, String content, Status status,WalkingProcessStatus walkingProcessStatus, String startPoint, String bcode, Dog dog, Boolean deletedYn) {
         this.title = title;
         this.content = content;
         this.status = status;
         this.walkingProcessStatus = walkingProcessStatus;
         this.startPoint = startPoint;
-        this.endPoint = endPoint;
-        this.dogId = dogId;
+        this.bcode = bcode;
+        this.dog = dog;
         this.deletedYn = deletedYn;
     }
 
@@ -75,5 +77,8 @@ public class JobPost extends BaseEntity {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public void setDog(Dog dog) {
+        this.dog = dog;}
 
 }
