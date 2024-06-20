@@ -31,7 +31,7 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
 
     @Query("select new com.doggyWalky.doggyWalky.apply.dto.response.MyApplyResponseDto(jp.member.id, mpi.nickName, mpi.profileImage, jp.id, jp.title, jp.defaultImage, jp.status, d.dogId, d.kind, a.id, a.status) from Apply a " +
             "join JobPost jp on jp.id = a.jobPost.id " +
-            "join Dog d on d.dogId = jp.dogId " +
+            "join Dog d on d.dogId = jp.dog.dogId " +
             "join MemberProfileInfo mpi on mpi.member.id = jp.member.id " +
             "where a.worker.id = :memberId and a.worker.deletedYn = false and jp.deletedYn = false and mpi.deletedYn = false")
     Page<MyApplyResponseDto> getMyApplyList(@Param("memberId") Long memberId, Pageable pageable);

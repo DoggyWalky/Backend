@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
+import static jakarta.persistence.EnumType.STRING;
+
 @Entity
 @Builder
 @Getter
@@ -20,7 +22,12 @@ public class Dog extends BaseEntity {
     private Long dogId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
     private Member member;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "dog_size")
+    private DogSize dogSize;
 
     private String weight;
 
@@ -32,6 +39,7 @@ public class Dog extends BaseEntity {
 
     private String profileImage;
 
+    // Todo: 강아지 분류 수정
     public void update(String name, String kind, String weight, String description) {
         if (name != null) this.name = name;
         if (kind != null) this.kind = kind;
