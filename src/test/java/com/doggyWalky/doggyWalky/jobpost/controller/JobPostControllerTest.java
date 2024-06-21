@@ -2,8 +2,9 @@ package com.doggyWalky.doggyWalky.jobpost.controller;
 
 import com.doggyWalky.doggyWalky.common.RestDocsTestSupport;
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
-import com.doggyWalky.doggyWalky.jobpost.dto.*;
-import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostRegisterRequest;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostSearchCriteria;
+import com.doggyWalky.doggyWalky.jobpost.dto.response.*;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.entity.WalkingProcessStatus;
 import com.doggyWalky.doggyWalky.jobpost.service.JobPostService;
@@ -31,7 +32,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;

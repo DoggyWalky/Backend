@@ -1,10 +1,16 @@
 package com.doggyWalky.doggyWalky.jobpost.controller;
 
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
-import com.doggyWalky.doggyWalky.jobpost.dto.*;
+import com.doggyWalky.doggyWalky.exception.ApplicationException;
+import com.doggyWalky.doggyWalky.exception.ErrorCode;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostPatchDto;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostRegisterRequest;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostSearchCriteria;
+import com.doggyWalky.doggyWalky.jobpost.dto.response.*;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.service.JobPostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +54,40 @@ public class JobPostController {
             log.error("게시글 등록 실패: {}, error: {}", memberId, e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * 게시글 수정하기
+     */
+    @PatchMapping("/{job-post-id}")
+    public ResponseEntity updateJobPost(@PathVariable("job-post-id") Long jobPostId, @Valid @RequestBody JobPostPatchDto dto, BindingResult bindingResult, Principal principal) {
+        // Validation 체크
+        if (bindingResult.hasErrors()) {
+
+            if (bindingResult.hasFieldErrors("title")) {
+                throw new ApplicationException(ErrorCode.INCORRECT_FORMAT_TITLE);
+            }
+
+            if (bindingResult.hasFieldErrors("content")) {
+                throw new ApplicationException(ErrorCode.INCORRECT_FORMAT_CONTENT);
+            }
+
+        }
+
+        Long memberId = Long.parseLong(principal.getName());
+        jobPostService.updateJobPost(memberId, jobPostId, dto);
+        return new ResponseEntity(new JobPostSimpleResponseDto(jobPostId), HttpStatus.OK);
+
+    }
+
+    /**
+     * 게시글 삭제하기
+     */
+    @DeleteMapping("/{job-post-id}")
+    public ResponseEntity deleteJobPost(@PathVariable("job-post-id") Long jobPostId, Principal principal) {
+        Long memberId = Long.parseLong(principal.getName());
+        jobPostService.deleteJobPost(memberId, jobPostId);
+        return new ResponseEntity(new JobPostSimpleResponseDto(jobPostId), HttpStatus.OK);
     }
 
     @GetMapping("/search")

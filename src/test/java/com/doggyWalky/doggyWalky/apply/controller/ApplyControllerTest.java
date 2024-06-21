@@ -8,7 +8,7 @@ import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.dog.dto.RegisterDogRequest;
 import com.doggyWalky.doggyWalky.dog.entity.Dog;
 import com.doggyWalky.doggyWalky.dog.repository.DogRepository;
-import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterRequest;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostRegisterRequest;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.repository.JobPostRepository;

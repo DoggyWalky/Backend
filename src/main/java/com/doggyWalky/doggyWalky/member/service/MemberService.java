@@ -101,7 +101,7 @@ public class MemberService {
         }
 
         // 공통 : MemberProfile 수정 작업
-        profile.changProfile(dto);
+        profile.changeProfile(dto);
 
     }
 

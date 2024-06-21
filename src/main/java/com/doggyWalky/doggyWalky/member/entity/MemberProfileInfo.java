@@ -47,16 +47,15 @@ public class MemberProfileInfo extends BaseEntity {
         this.description = description;
     }
 
-    public void changProfile(String nickName, String description) {
+    public void changeProfile(String nickName, String description) {
         this.nickName = nickName;
         this.description = description;
     }
 
-    public void changProfile(MemberPatchProfileDto dto) {
+    public void changeProfile(MemberPatchProfileDto dto) {
         this.profileImage = dto.getProfileImage();
         this.description = dto.getDescription();
         this.nickName = dto.getNickName();
-        this.updatedDate = LocalDateTime.now();
     }
 
     public void softDelete() {
