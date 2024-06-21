@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface JobPostRepository extends JpaRepository<JobPost, Long>, JpaSpecificationExecutor<JobPost> {
+public interface JobPostRepository extends JpaRepository<JobPost, Long>, JpaSpecificationExecutor<JobPost>, JobPostRepositoryCustom {
 
 
     @Query("select jp from JobPost jp where jp.id = :jobPostId and jp.deletedYn=false")
