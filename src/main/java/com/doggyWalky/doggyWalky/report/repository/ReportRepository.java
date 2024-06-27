@@ -4,6 +4,7 @@ import com.doggyWalky.doggyWalky.chat.dto.response.ChatMessageResponse;
 import com.doggyWalky.doggyWalky.report.entity.Report;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
@@ -16,4 +17,7 @@ public interface ReportRepository extends JpaRepository<Report, Long>, ReportRep
             "and crms.opponent.id = :targetId ) and cr.jobPostId = :jobPostId)")
     List<ChatMessageResponse> getChatMessagesForReport(@Param("reporterId") Long reporterId, @Param("targetId") Long targetId, @Param("jobPostId") Long jobPostId);
 
+    @Modifying
+    @Query("delete from Report r where r.jobPost.id = :jobPostId")
+    void deleteByJobPostId(@Param("jobPostId") Long jobPostId);
 }

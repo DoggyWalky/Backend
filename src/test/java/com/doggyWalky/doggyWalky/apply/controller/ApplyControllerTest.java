@@ -8,7 +8,7 @@ import com.doggyWalky.doggyWalky.constant.ConstantPool;
 import com.doggyWalky.doggyWalky.dog.dto.RegisterDogRequest;
 import com.doggyWalky.doggyWalky.dog.entity.Dog;
 import com.doggyWalky.doggyWalky.dog.repository.DogRepository;
-import com.doggyWalky.doggyWalky.jobpost.dto.JobPostRegisterRequest;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostRegisterRequest;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
 import com.doggyWalky.doggyWalky.jobpost.repository.JobPostRepository;
@@ -80,7 +80,7 @@ class ApplyControllerTest extends RestDocsTestSupport {
         dogRepository.save(dog);
 
         // 게시글 생성
-        JobPostRegisterRequest postRequest = new JobPostRegisterRequest("게시글 1번","말티즈 산책 부탁드리겠습니다.", Status.WAITING,"출발지","목적지",dog.getDogId());
+        JobPostRegisterRequest postRequest = new JobPostRegisterRequest("게시글 1번","말티즈 산책 부탁드리겠습니다.","출발지","목적지",dog.getDogId());
         JobPost jobPost = postRequest.toEntity();
         jobPost.setDog(dog);
         jobPost.assignWriter(taewon);
@@ -94,7 +94,7 @@ class ApplyControllerTest extends RestDocsTestSupport {
         dogRepository.save(dog2);
 
         // 게시글 생성
-        JobPostRegisterRequest postRequest2 = new JobPostRegisterRequest("게시글 2번","진돗개 산책 부탁드리겠습니다.", Status.WAITING,"출발지","목적지",dog2.getDogId());
+        JobPostRegisterRequest postRequest2 = new JobPostRegisterRequest("게시글 2번","진돗개 산책 부탁드리겠습니다.","출발지","목적지",dog2.getDogId());
         JobPost jobPost2 = postRequest2.toEntity();
         jobPost2.setDog(dog2);
         jobPost2.assignWriter(taewon);

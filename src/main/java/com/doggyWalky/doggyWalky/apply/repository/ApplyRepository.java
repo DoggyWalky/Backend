@@ -6,6 +6,7 @@ import com.doggyWalky.doggyWalky.apply.entity.Apply;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -35,4 +36,8 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
             "join MemberProfileInfo mpi on mpi.member.id = jp.member.id " +
             "where a.worker.id = :memberId and a.worker.deletedYn = false and jp.deletedYn = false and mpi.deletedYn = false")
     Page<MyApplyResponseDto> getMyApplyList(@Param("memberId") Long memberId, Pageable pageable);
+
+    @Modifying
+    @Query("delete from Apply a where a.jobPost.id = :jobPostId")
+    void deleteByJobPostId(@Param("jobPostId") Long jobPostId);
 }

@@ -570,6 +570,28 @@ include::{snippets}/job-post-controller-test/registerpost_200/response-fields.ad
 
 '''
 
+=== 게시글 수정하기
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/updatepost_200/http-request.adoc[]
+
+
+==== 요청 필드
+
+include::{snippets}/job-post-controller-test/updatepost_200/request-fields.adoc[]
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/updatepost_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/updatepost_200/response-fields.adoc[]
+
+'''
+
 === 게시글 검색조건 조회하기
 
 ==== 요청
@@ -609,6 +631,25 @@ include::{snippets}/job-post-controller-test/walkcomplete_200/response-fields.ad
 
 '''
 
+=== 게시글 삭제하기
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/removepost_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/removepost_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/removepost_200/response-fields.adoc[]
+
+'''
+
 === 게시글 상세 조회
 
 ==== 요청
@@ -644,6 +685,25 @@ include::{snippets}/job-post-controller-test/getmypostlist_200/http-response.ado
 ==== 응답 필드
 
 include::{snippets}/job-post-controller-test/getmypostlist_200/response-fields.adoc[]
+
+'''
+
+=== 내가 찜한 게시글 목록 조회
+
+==== 요청
+
+include::{snippets}/job-post-controller-test/getmylikepostlist_200/http-request.adoc[]
+
+==== 요청 필드
+
+
+==== 응답
+
+include::{snippets}/job-post-controller-test/getmylikepostlist_200/http-response.adoc[]
+
+==== 응답 필드
+
+include::{snippets}/job-post-controller-test/getmylikepostlist_200/response-fields.adoc[]
 
 '''
 

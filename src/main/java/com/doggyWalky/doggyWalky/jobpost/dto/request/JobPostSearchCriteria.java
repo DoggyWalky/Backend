@@ -1,4 +1,4 @@
-package com.doggyWalky.doggyWalky.jobpost.dto;
+package com.doggyWalky.doggyWalky.jobpost.dto.request;
 
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
