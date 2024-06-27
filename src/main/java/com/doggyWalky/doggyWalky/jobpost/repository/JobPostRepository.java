@@ -36,6 +36,12 @@ public interface JobPostRepository extends JpaRepository<JobPost, Long>, JpaSpec
             "where jp.member.id = :memberId and jp.deletedYn = false")
     Page<MyJobPostResponseDto> findListAppliedToTheJobPost(@Param("memberId") Long memberId, Pageable pageable);
 
+    @Query("select new com.doggyWalky.doggyWalky.jobpost.dto.response.MyJobPostResponseDto(jp.id, jp.title,jp.defaultImage,jp.status,d.dogSize,jp.startPoint,jp.createdDate) from Like l " +
+            "join JobPost jp on l.jobPost.id = jp.id and jp.deletedYn = false and l.member.id = :memberId " +
+            "join Dog d on jp.dog.dogId = d.dogId " +
+            "where l.likeYn = true")
+    Page<MyJobPostResponseDto> findMyLikePostList(@Param("memberId") Long memberId, Pageable pageable);
+
     @Query("select new com.doggyWalky.doggyWalky.jobpost.dto.response.JobPostDetailResponseDto(jp.member.id, mpi.profileImage, mpi.nickName, jp.id, jp.title, jp.defaultImage, jp.content, jp.status,jp.startPoint,jp.bcode,jp.createdDate,d.dogId,d.profileImage,d.name,d.dogSize) from JobPost jp " +
             "join MemberProfileInfo mpi on jp.member.id = mpi.member.id " +
             "join Dog d on jp.dog.dogId = d.dogId " +

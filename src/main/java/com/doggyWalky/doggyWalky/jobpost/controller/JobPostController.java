@@ -90,6 +90,9 @@ public class JobPostController {
         return new ResponseEntity(new JobPostSimpleResponseDto(jobPostId), HttpStatus.OK);
     }
 
+    /**
+     * 게시글 검색 조회하기
+     */
     @GetMapping("/search")
     public ResponseEntity<List<JobPostResponseDto>> searchJobPosts(
             @RequestParam(required = false) String keyword,
@@ -116,6 +119,20 @@ public class JobPostController {
     public ResponseEntity<JobPostDetailResponseDto> getPostDetail(@PathVariable("job-post-id") Long jobPostId) {
         JobPostDetailResponseDto dto = jobPostService.getJobPostDetail(jobPostId);
         return new ResponseEntity(dto, HttpStatus.OK);
+    }
+
+    @GetMapping("/like-post")
+    public ResponseEntity<Page<MyJobPostResponseDto>> getMyLikePostList(Principal principal,@PageableDefault(size = 10,sort="createdDate", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
+        Long memberId = Long.parseLong(principal.getName());
+
+        // 기본 Sort 설정
+        Sort sort = pageable.getSort();
+
+        // Pageable 객체 생성
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        Page<MyJobPostResponseDto> myLikePostList = jobPostService.getMyLikePostList(memberId, sortedPageable);
+        return new ResponseEntity<>(myLikePostList, HttpStatus.OK);
     }
 
     /**

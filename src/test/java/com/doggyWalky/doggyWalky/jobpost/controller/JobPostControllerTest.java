@@ -2,6 +2,7 @@ package com.doggyWalky.doggyWalky.jobpost.controller;
 
 import com.doggyWalky.doggyWalky.common.RestDocsTestSupport;
 import com.doggyWalky.doggyWalky.dog.entity.DogSize;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostPatchDto;
 import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostRegisterRequest;
 import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostSearchCriteria;
 import com.doggyWalky.doggyWalky.jobpost.dto.response.*;
@@ -64,7 +65,7 @@ class JobPostControllerTest extends RestDocsTestSupport {
         //given
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-        JobPostRegisterRequest jobPostRegisterRequest = new JobPostRegisterRequest("게시글 제목","게시글 내용", Status.WAITING,"출발지","bcode",3L);
+        JobPostRegisterRequest jobPostRegisterRequest = new JobPostRegisterRequest("게시글 제목","게시글 내용","출발지","bcode",3L);
         String jobPostToJson = objectMapper.writeValueAsString(jobPostRegisterRequest);
 
         MockMultipartFile jobPost = new MockMultipartFile("jobPost", "", "application/json", jobPostToJson.getBytes());
@@ -72,7 +73,7 @@ class JobPostControllerTest extends RestDocsTestSupport {
         MockMultipartFile image2 = new MockMultipartFile("images", "image2.jpg", "image/jpeg", "test image 2".getBytes());
 
         JobPostRegisterResponse response = new JobPostRegisterResponse(1L,1L,jobPostRegisterRequest.getTitle(),
-                jobPostRegisterRequest.getContent(),jobPostRegisterRequest.getStatus().getEnStatus(),jobPostRegisterRequest.getStartPoint(),jobPostRegisterRequest.getBcode()
+                jobPostRegisterRequest.getContent(),Status.WAITING.getEnStatus(),jobPostRegisterRequest.getStartPoint(),jobPostRegisterRequest.getBcode()
         , jobPostRegisterRequest.getDogId(), Arrays.asList(image1.getName(), image2.getName()));
 
         Mockito.when(jobPostService.register(any(Long.class), any(JobPostRegisterRequest.class), any(List.class))).thenReturn(response);
@@ -96,7 +97,6 @@ class JobPostControllerTest extends RestDocsTestSupport {
                         requestPartFields("jobPost",
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("등록할 게시글의 제목"),
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("등록할 게시글의 내용"),
-                                fieldWithPath("status").type(JsonFieldType.STRING).description("등록할 게시글의 구인 상태"),
                                 fieldWithPath("startPoint").type(JsonFieldType.STRING).description("등록할 게시글의 출발지"),
                                 fieldWithPath("bcode").type(JsonFieldType.STRING).description("등록할 게시글의 Bcode"),
                                 fieldWithPath("dogId").type(JsonFieldType.NUMBER).description("등록할 게시글에서 산책시킬 강아지의 고유 번호")
@@ -129,6 +129,71 @@ class JobPostControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("images")
                                         .type(JsonFieldType.VARIES)
                                         .description("등록한 게시글의 파일 이미지")
+                        )
+                ));
+    }
+
+    @DisplayName("게시글 수정 테스트")
+    @Test
+    public void updatepost_200() throws Exception {
+        //given
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        JobPostPatchDto dto = new JobPostPatchDto("게시글 제목 예시입니다. 1번 게시글입니다.", "게시글 내용 예시입니다. 1번 게시글 내용입니다.", "출발지", "bcode", 1L, 1L, "image.jpg");
+        String jobPostPatchDtoToJson = objectMapper.writeValueAsString(dto);
+
+        Mockito.doNothing().when(jobPostService).updateJobPost(any(Long.class), any(Long.class), any(JobPostPatchDto.class));
+
+
+        //when & then
+        mockMvc.perform(patch("/api/job-post/{job_post_id}",1L)
+                        .with(SecurityMockMvcRequestPostProcessors.user(userDetails))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jobPostPatchDtoToJson))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestHeaders( // 요청 헤더 추가
+                                headerWithName("Authorization")
+                                        .description("Bearer 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 게시글의 제목"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 게시글의 내용"),
+                                fieldWithPath("startPoint").type(JsonFieldType.STRING).description("수정할 게시글의 출발지"),
+                                fieldWithPath("bcode").type(JsonFieldType.STRING).description("수정할 게시글의 Bcode"),
+                                fieldWithPath("dogId").type(JsonFieldType.NUMBER).description("수정할 게시글에서 산책시킬 강아지의 고유 번호"),
+                                fieldWithPath("fileId").type(JsonFieldType.NUMBER).description("수정할 이미지 파일 고유 번호"),
+                                fieldWithPath("profileImage").type(JsonFieldType.STRING).description("기존의 이미지 파일 주소")
+                        ),
+                        responseFields( // 응답 필드 추가
+                                fieldWithPath("jobPostId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("수정된 게시글의 고유 번호")
+                        )
+                ));
+    }
+
+    @DisplayName("게시글 삭제 테스트")
+    @Test
+    public void removepost_200() throws Exception {
+        //given
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        Mockito.doNothing().when(jobPostService).deleteJobPost(anyLong(),anyLong());
+
+        //when & then
+        mockMvc.perform(delete("/api/job-post/{job_post_id}",1L)
+                        .with(SecurityMockMvcRequestPostProcessors.user(userDetails)))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestHeaders( // 요청 헤더 추가
+                                headerWithName("Authorization")
+                                        .description("Bearer 토큰")
+                        ),
+                        responseFields( // 응답 필드 추가
+                                fieldWithPath("jobPostId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("삭제된 게시글의 고유 번호")
                         )
                 ));
     }
@@ -200,6 +265,76 @@ class JobPostControllerTest extends RestDocsTestSupport {
                                         .type(JsonFieldType.VARIES)
                                         .description("강아지 분류")
 
+                        )
+                ));
+    }
+
+    @DisplayName("내가 찜한 게시글 목록 조회 테스트")
+    @Test
+    public void getmylikepostlist_200() throws Exception {
+        //given
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        MyJobPostResponseDto dto1 = new MyJobPostResponseDto(1L, "게시글 제목1", "PostImage1.jpg", Status.WAITING, DogSize.MEDIUM, "출발지1", LocalDateTime.now());
+        MyJobPostResponseDto dto2 = new MyJobPostResponseDto(2L, "게시글 제목2", "PostImage2.jpg", Status.WAITING, DogSize.LARGE, "출발지2", LocalDateTime.now());
+
+        Page<MyJobPostResponseDto> page = new PageImpl<>(Arrays.asList(dto1, dto2), PageRequest.of(0,10), 2);
+
+        Mockito.when(jobPostService.getMyLikePostList(Mockito.anyLong(),Mockito.any(Pageable.class)))
+                .thenReturn(page);
+
+        //when & then
+        mockMvc.perform(get("/api/job-post/like-post")
+                        .param("page","0")
+                        .param("size","10")
+                        .with(SecurityMockMvcRequestPostProcessors.user(userDetails)))
+                .andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestHeaders( // 요청 헤더 추가
+                                headerWithName("Authorization")
+                                        .description("Bearer 토큰")
+                        ),
+                        responseFields( // 응답 필드 추가
+                                fieldWithPath("content[].postId")
+                                        .type(JsonFieldType.NUMBER)
+                                        .description("게시글의 고유 번호"),
+                                fieldWithPath("content[].title")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글 제목"),
+                                fieldWithPath("content[].fileImage")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글 이미지 주소"),
+                                fieldWithPath("content[].status")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("게시글 예약 상태"),
+                                fieldWithPath("content[].dogSize")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("강아지 분류"),
+                                fieldWithPath("content[].startPoint")
+                                        .type(JsonFieldType.STRING)
+                                        .description("게시글의 출발지"),
+                                fieldWithPath("content[].createdDate")
+                                        .type(JsonFieldType.VARIES)
+                                        .description("게시글 생성 일시"),
+                                fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description("페이지 번호"),
+                                fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER).description("페이지 크기"),
+                                fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 여부"),
+                                fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬된 상태"),
+                                fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않은 상태"),
+                                fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER).description("오프셋"),
+                                fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN).description("페이지되지 않은 상태"),
+                                fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN).description("페이지 상태"),
+                                fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
+                                fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 요소 수"),
+                                fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+                                fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 크기"),
+                                fieldWithPath("number").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 정보가 비어 있는지 여부"),
+                                fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬된 상태"),
+                                fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않은 상태"),
+                                fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫 페이지 여부"),
+                                fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지의 요소 수"),
+                                fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어있는지 여부")
                         )
                 ));
     }

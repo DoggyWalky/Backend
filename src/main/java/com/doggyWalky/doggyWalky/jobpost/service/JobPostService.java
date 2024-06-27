@@ -212,6 +212,14 @@ public class JobPostService {
     }
 
     /**
+     * 내가 찜한 게시글 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public Page<MyJobPostResponseDto> getMyLikePostList(Long memberId, Pageable pageable) {
+        return jobPostRepository.findMyLikePostList(memberId, pageable);
+    }
+
+    /**
      * 내가 작성한 게시글 목록 조회
      */
     @Transactional(readOnly = true)
