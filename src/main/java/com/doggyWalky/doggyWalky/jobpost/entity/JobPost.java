@@ -2,6 +2,7 @@ package com.doggyWalky.doggyWalky.jobpost.entity;
 
 import com.doggyWalky.doggyWalky.common.entity.BaseEntity;
 import com.doggyWalky.doggyWalky.dog.entity.Dog;
+import com.doggyWalky.doggyWalky.jobpost.dto.request.JobPostPatchDto;
 import com.doggyWalky.doggyWalky.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -79,6 +80,21 @@ public class JobPost extends BaseEntity {
     }
 
     public void setDog(Dog dog) {
-        this.dog = dog;}
+        this.dog = dog;
+    }
+
+    public void delete() {
+        this.deletedYn = true;
+    }
+
+    public void changeJobPost(JobPostPatchDto dto, Dog dog) {
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
+        this.startPoint = dto.getStartPoint();
+        this.defaultImage = dto.getProfileImage();
+        this.bcode = dto.getBcode();
+        this.dog = dog;
+    }
+
 
 }

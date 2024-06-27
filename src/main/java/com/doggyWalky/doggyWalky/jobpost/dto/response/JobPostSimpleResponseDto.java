@@ -1,4 +1,4 @@
-package com.doggyWalky.doggyWalky.jobpost.dto;
+package com.doggyWalky.doggyWalky.jobpost.dto.response;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

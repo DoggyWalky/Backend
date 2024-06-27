@@ -1,4 +1,4 @@
-package com.doggyWalky.doggyWalky.jobpost.dto;
+package com.doggyWalky.doggyWalky.jobpost.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

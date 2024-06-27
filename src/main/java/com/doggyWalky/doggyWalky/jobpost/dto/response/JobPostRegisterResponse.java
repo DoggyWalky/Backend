@@ -1,4 +1,4 @@
-package com.doggyWalky.doggyWalky.jobpost.dto;
+package com.doggyWalky.doggyWalky.jobpost.dto.response;
 
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;

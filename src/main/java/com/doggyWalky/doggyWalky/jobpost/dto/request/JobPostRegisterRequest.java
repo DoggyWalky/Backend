@@ -1,8 +1,9 @@
-package com.doggyWalky.doggyWalky.jobpost.dto;
+package com.doggyWalky.doggyWalky.jobpost.dto.request;
 
 import com.doggyWalky.doggyWalky.file.entity.File;
 import com.doggyWalky.doggyWalky.jobpost.entity.JobPost;
 import com.doggyWalky.doggyWalky.jobpost.entity.Status;
+import com.doggyWalky.doggyWalky.jobpost.entity.WalkingProcessStatus;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +24,6 @@ public class JobPostRegisterRequest {
 
     private String content;
 
-    private Status status;
-
     private String startPoint;
 
     private String bcode;
@@ -36,10 +35,11 @@ public class JobPostRegisterRequest {
                 .builder()
                 .title(this.title)
                 .content(this.content)
-                .status(this.status)
+                .status(Status.WAITING)
                 .startPoint(this.startPoint)
                 .bcode(this.bcode)
                 .deletedYn(false)
+                .walkingProcessStatus(WalkingProcessStatus.PREWALK)
                 .build();
     }
 
